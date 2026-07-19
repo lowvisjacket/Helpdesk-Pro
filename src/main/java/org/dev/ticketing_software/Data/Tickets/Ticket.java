@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -15,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 @Entity(name = "tickets")
 @Getter
 @Setter
-public class Ticket {
+public class Ticket implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,12 +33,10 @@ public class Ticket {
     private String ticket_date;
     private String ticket_time;
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm:ss");
-
     public Ticket() {}
 
     public Ticket(String h, String b, String d, String r, Integer di) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.department = d;
         this.requestor_id = di;
         this.title = h;
@@ -47,7 +46,7 @@ public class Ticket {
         this.agent_id = 0000;
         this.importance = "LOW";
         this.ticket_status = "OPEN";
-        this.ticket_date = LocalDate.now().format(formatter);
+        this.ticket_date = LocalDate.now(ZoneOffset.UTC).format(formatter);
         this.ticket_time = LocalTime.now(ZoneOffset.UTC).toString();
     }
 

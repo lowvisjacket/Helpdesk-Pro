@@ -17,12 +17,12 @@ public class AgentEndpoint {
     @Autowired
     AgentRepository agentRepository;
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") //returns agent's info
     public Optional<Agent> getAgentByUUID(@PathVariable long id) {
         return agentRepository.findById(id);
     }
 
-    @GetMapping("/allagents")
+    @GetMapping("/allagents") //only for agents to see
     public Iterable<Agent> getAllAgents() {
         return agentRepository.findAll();
     }

@@ -12,24 +12,27 @@ public class TicketEndpoint {
     @Autowired
     TicketRepository ticketRepository;
 
+    //returns a specific ticket by ID
     @GetMapping("/{id}")
     public Ticket getTicket(@PathVariable int id) {
         return ticketRepository.findByid(id);
     }
 
+    //returns all tickets (mainly for dashboard)
     @GetMapping("/alltickets")
     public Iterable<Ticket> getAllTickets() {
         return ticketRepository.findAll();
     }
 
+    //returns tickets by its respective department
     @GetMapping("/department/{dept}")
     public Iterable<Ticket> getTicketByAgentID(@PathVariable String dept) {
         return ticketRepository.findByDepartment(dept);
     }
 
+    //post to submit a new ticket
     @PostMapping("/newticket")
     public Ticket addTicket(@RequestBody Ticket newTicket) {
-        System.out.println(newTicket.getDescription());
         return ticketRepository.save(new Ticket(newTicket.getTitle(), newTicket.getDescription(), newTicket.getDepartment(), newTicket.getRequestor(), newTicket.getRequestor_id()));
     }
 }
