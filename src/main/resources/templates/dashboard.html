@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #333;
+        }
+
+        header {
+            background: #1976d2;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info button {
+            background: white;
+            color: #1976d2;
+            border: none;
+            padding: .5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .create-btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: .7rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .ticket-container {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .ticket-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,.1);
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .ticket-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: .75rem;
+        }
+
+        .description {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .status,
+        .severity {
+            display: inline-block;
+            padding: .25rem .7rem;
+            border-radius: 15px;
+            font-size: .85rem;
+            font-weight: bold;
+        }
+
+        .ticket-footer {
+            margin-top: 1rem;
+            text-align: right;
+        }
+
+        .view-btn {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: .6rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .view-btn:hover {
+            background: #1565c0;
+        }
+
+        .empty-message {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Ticket Dashboard</h1>
+
+    <div class="user-info">
+        <span th:text="${username}"></span>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+</header>
+
+
+<main>
+
+    <div class="toolbar">
+        <h2>Tickets</h2>
+
+        <button class="create-btn">
+            Create Ticket
+        </button>
+    </div>
+
+
+    <div class="ticket-container">
+
+        <!-- Tickets will be rendered here -->
+
+        <div class="empty-message" th:if="${#lists.isEmpty(tickets)}">
+            No tickets available.
+        </div>
+
+
+        <div class="ticket-card" th:each="ticket : ${tickets}">
+
+            <div class="ticket-header">
+                <h3 th:text="${ticket.title}">
+                    Ticket Title
+                </h3>
+
+                <span class="severity" th:text="${ticket.severity}">
+                    Severity
+                </span>
+            </div>
+
+
+            <div class="ticket-details">
+
+                <p>
+                    <strong>Department:</strong>
+                    <span th:text="${ticket.department}"></span>
+                </p>
+
+                <p>
+                    <strong>Agent:</strong>
+                    <span th:text="${ticket.agent} ?: 'Unassigned'"></span>
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    <span class="status" th:text="${ticket.status}"></span>
+                </p>
+
+                <p>
+                    <strong>Created:</strong>
+                    <span th:text="${ticket.createdDate}"></span>
+                </p>
+
+                <p>
+                    <strong>Updated:</strong>
+                    <span th:text="${ticket.updatedDate}"></span>
+                </p>
+
+            </div>
+
+
+            <div class="description">
+
+                <strong>Description</strong>
+
+                <p th:text="${ticket.description}"></p>
+
+            </div>
+
+
+            <div class="ticket-footer">
+
+                <button class="view-btn">
+                    View Ticket
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+</html>

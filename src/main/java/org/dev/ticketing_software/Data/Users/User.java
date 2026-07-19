@@ -12,12 +12,14 @@ import org.hibernate.annotations.UuidGenerator;
 @Getter
 @Setter
 public class User {
-
     @Id
     @UuidGenerator(style = UuidGenerator.Style.TIME)
     private String uuid;
     private String first_name;
     private String last_name;
     private String username;
+    private String password;
     private String department;
+    private String role;
+    private boolean account_status;
 }

@@ -36,3 +36,4 @@ build/
 !/application.properties
 !/src/main/java/org/dev/ticketing_software/Data/Tickets/TicketStructure.txt
 !/HELP.md
+!/src/main/java/org/dev/ticketing_software/TestData/
