@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,13 +23,15 @@ public class SecurityConfiguration {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         auth -> auth.requestMatchers("/home").authenticated()
-                                .requestMatchers("/dashboard/**").hasAnyAuthority("TECHNICIAN", "ADMIN", "SYSADMIN")
+                                .requestMatchers("/auth/login").permitAll()
+                                .requestMatchers("/dashboard/**").hasAnyAuthority("TECHNICIAN", "ADMIN", "SYSADMIN", "USER")
                                 .anyRequest().authenticated()
                         )
                 .formLogin((form) -> form
                         .loginPage("/auth/login")
                         .defaultSuccessUrl("/dashboard/")
-                );
+                )
+                .logout(LogoutConfigurer::permitAll);
         return http.build();
     }
 
