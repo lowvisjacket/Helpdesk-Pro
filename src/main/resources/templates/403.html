@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Access Denied</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+        }
+
+        .card{
+
+            width:600px;
+            max-width:90%;
+
+            background:white;
+
+            padding:55px 50px;
+
+            border-radius:15px;
+
+            text-align:center;
+
+            box-shadow:0 12px 30px rgba(0,0,0,.12);
+
+        }
+
+        .divider{
+
+            width:70px;
+            height:4px;
+
+            background:#1976d2;
+
+            margin:0 auto 30px auto;
+
+            border-radius:4px;
+
+        }
+
+        h1{
+
+            color:#1976d2;
+            font-size:34px;
+
+            margin-bottom:20px;
+
+        }
+
+        p{
+
+            color:#666;
+            font-size:16px;
+            line-height:1.7;
+
+            margin-bottom:40px;
+
+        }
+
+        .buttons{
+
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            flex-wrap:wrap;
+
+        }
+
+        .btn{
+
+            padding:12px 28px;
+
+            border:none;
+            border-radius:8px;
+
+            text-decoration:none;
+
+            font-size:15px;
+            font-weight:bold;
+
+            cursor:pointer;
+
+            transition:.2s ease;
+
+        }
+
+        .primary{
+
+            background:#1976d2;
+            color:white;
+
+        }
+
+        .primary:hover{
+
+            background:#1565c0;
+
+        }
+
+        .secondary{
+
+            background:white;
+            color:#1976d2;
+
+            border:2px solid #1976d2;
+
+        }
+
+        .secondary:hover{
+
+            background:#1976d2;
+            color:white;
+
+        }
+
+        @media(max-width:650px){
+
+            .card{
+
+                padding:40px 30px;
+
+            }
+
+            .buttons{
+
+                flex-direction:column;
+
+            }
+
+            .btn{
+
+                width:100%;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="divider"></div>
+
+    <h1>Access Denied</h1>
+
+    <p>
+        Your account doesn't have permission to access this page.
+        If you believe you should have access, please contact your system administrator.
+    </p>
+
+    <div class="buttons">
+
+        <a th:href="@{/logout}" class="btn primary">
+            Logout
+        </a>
+
+<!--        <button type="button"-->
+<!--                class="btn secondary"-->
+<!--                onclick="history.back()">-->
+<!--            Go Back-->
+<!--        </button>-->
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

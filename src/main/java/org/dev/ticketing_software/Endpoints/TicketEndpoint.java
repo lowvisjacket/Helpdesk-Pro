@@ -35,4 +35,10 @@ public class TicketEndpoint {
     public Ticket addTicket(@RequestBody Ticket newTicket) {
         return ticketRepository.save(new Ticket(newTicket.getTitle(), newTicket.getDescription(), newTicket.getDepartment(), newTicket.getRequestor(), newTicket.getRequestor_id()));
     }
+
+    @PostMapping("/{id}/update")
+    public String updateTicket(@RequestBody Ticket ticket) {
+        ticketRepository.save(ticket);
+        return "Ticket Updated";
+    }
 }

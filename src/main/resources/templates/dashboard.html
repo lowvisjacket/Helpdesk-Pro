@@ -224,9 +224,12 @@
 
             <div class="ticket-footer">
 
-                <button class="view-btn">
-                    View Ticket
-                </button>
+                <form th:action="@{/dashboard/details/{id}(id=${ticket.id})}" method="get">
+                    <button class="view-btn" type="submit">
+                        View Ticket
+                    </button>
+                </form>
+
 
             </div>
 

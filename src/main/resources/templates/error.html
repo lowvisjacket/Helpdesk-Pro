@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+        }
+
+        .card{
+            background:white;
+            width:500px;
+            padding:40px;
+            text-align:center;
+            border-radius:12px;
+            box-shadow:0 8px 20px rgba(0,0,0,.12);
+        }
+
+        h1{
+            color:#d32f2f;
+            font-size:64px;
+            margin-bottom:10px;
+        }
+
+        h2{
+            color:#333;
+            margin-bottom:15px;
+        }
+
+        p{
+            color:#666;
+            line-height:1.6;
+            margin-bottom:30px;
+        }
+
+        .btn{
+            display:inline-block;
+            padding:12px 28px;
+            background:#1976d2;
+            color:white;
+            text-decoration:none;
+            border-radius:8px;
+            font-weight:bold;
+            transition:.2s;
+        }
+
+        .btn:hover{
+            background:#1565c0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>⚠</h1>
+
+    <h2>Something Went Wrong</h2>
+
+    <p>
+        The page you requested could not be loaded or an unexpected error occurred.
+    </p>
+
+    <a th:href="@{/dashboard/}" class="btn">
+        Return Home
+    </a>
+
+</div>
+
+</body>
+
+</html>

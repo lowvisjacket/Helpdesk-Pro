@@ -24,12 +24,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         auth -> auth.requestMatchers("/home").authenticated()
                                 .requestMatchers("/auth/login").permitAll()
-                                .requestMatchers("/dashboard/**").hasAnyAuthority("TECHNICIAN", "ADMIN", "SYSADMIN", "USER")
+                                .requestMatchers("/dashboard/**").hasAnyAuthority("TECHNICIAN", "ADMIN", "SYSADMIN")
                                 .anyRequest().authenticated()
                         )
                 .formLogin((form) -> form
                         .loginPage("/auth/login")
-                        .defaultSuccessUrl("/dashboard/")
+                        .defaultSuccessUrl("/dashboard/", true)
                 )
                 .logout(LogoutConfigurer::permitAll);
         return http.build();
