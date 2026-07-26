@@ -1,229 +1,549 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Create Ticket</title>
 
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:"Inter",Arial,sans-serif;
         }
 
-        body {
-            background: #f5f7fb;
-            color: #333;
+
+        body{
+
+            background:#f8fafc;
+
+            color:#1e293b;
+
         }
 
-        header {
-            background: #1976d2;
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+
+
+
+
+        /* HEADER */
+
+
+        header{
+
+            height:75px;
+
+            background:white;
+
+            border-bottom:1px solid #e2e8f0;
+
+            display:flex;
+
+            align-items:center;
+
+            padding:0 35px;
+
+            box-shadow:0 2px 8px rgba(0,0,0,.04);
+
         }
 
-        header h1 {
-            font-size: 1.8rem;
+
+
+        header h1{
+
+            color:#0f172a;
+
+            font-size:26px;
+
+            font-weight:700;
+
         }
 
-        .container {
-            max-width: 850px;
-            margin: 40px auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,.1);
-            padding: 30px;
+
+
+
+
+        /* MAIN CARD */
+
+
+        .container{
+
+            max-width:850px;
+
+            margin:40px auto;
+
+            background:white;
+
+            border-radius:14px;
+
+            padding:35px;
+
+            box-shadow:0 4px 15px rgba(0,0,0,.06);
+
         }
 
-        .container h2 {
-            margin-bottom: 25px;
-            color: #1976d2;
+
+
+
+        .container h2{
+
+            color:#0f172a;
+
+            font-size:24px;
+
+            margin-bottom:30px;
+
         }
 
-        .form-group {
-            margin-bottom: 20px;
+
+
+
+
+        /* FORM */
+
+
+        .form-group{
+
+            margin-bottom:25px;
+
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
+
+
+        label{
+
+            display:block;
+
+            color:#64748b;
+
+            font-size:13px;
+
+            font-weight:600;
+
+            margin-bottom:8px;
+
         }
+
+
+
+
 
         input,
         select,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 15px;
+        textarea{
+
+
+            width:100%;
+
+            padding:13px;
+
+            border-radius:8px;
+
+            border:1px solid #e2e8f0;
+
+            background:#f8fafc;
+
+            font-size:15px;
+
+            color:#1e293b;
+
+            transition:.2s;
+
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 180px;
+
+
+
+        input:focus,
+        select:focus,
+        textarea:focus{
+
+            outline:none;
+
+            border-color:#2563eb;
+
+            background:white;
+
         }
 
-        .row {
-            display: flex;
-            gap: 20px;
+
+
+
+        textarea{
+
+            min-height:180px;
+
+            resize:vertical;
+
         }
 
-        .row .form-group {
-            flex: 1;
+
+
+
+
+        .row{
+
+            display:grid;
+
+            grid-template-columns:1fr 1fr;
+
+            gap:25px;
+
         }
 
-        .buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            margin-top: 25px;
+
+
+
+
+        /* BUTTONS */
+
+
+        .buttons{
+
+            display:flex;
+
+            justify-content:flex-end;
+
+            gap:15px;
+
+            margin-top:35px;
+
         }
 
-        .btn {
-            padding: 12px 22px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
+
+
+
+
+        .btn{
+
+            padding:12px 24px;
+
+            border:none;
+
+            border-radius:8px;
+
+            cursor:pointer;
+
+            font-weight:600;
+
+            font-size:15px;
+
+            transition:.2s;
+
         }
 
-        .btn-primary {
-            background: #1976d2;
-            color: white;
+
+
+
+
+        .btn-primary{
+
+            background:#2563eb;
+
+            color:white;
+
         }
 
-        .btn-primary:hover {
-            background: #1565c0;
+
+
+
+        .btn-primary:hover{
+
+            background:#1d4ed8;
+
         }
 
-        .btn-secondary {
-            background: #757575;
-            color: white;
+
+
+
+
+        .btn-secondary{
+
+            background:#64748b;
+
+            color:white;
+
         }
 
-        .btn-secondary:hover {
-            background: #616161;
+
+
+
+        .btn-secondary:hover{
+
+            background:#475569;
+
         }
+
+
+
+
+
+        @media(max-width:700px){
+
+
+            .container{
+
+                margin:20px;
+
+                padding:25px;
+
+            }
+
+
+
+            .row{
+
+                grid-template-columns:1fr;
+
+            }
+
+
+        }
+
+
+
     </style>
+
+
 </head>
+
+
 
 <body>
 
+
+
 <header>
-    <h1>Submit a Ticket</h1>
+
+    <h1>
+        Submit a Ticket
+    </h1>
+
 </header>
+
+
+
+
 
 <div class="container">
 
-    <h2>New Ticket</h2>
 
-    <form th:action="@{/tickets/newticket}" method="post">
+
+    <h2>
+        New Ticket
+    </h2>
+
+
+
+
+
+    <form th:action="@{/tickets/newticket}"
+          method="post">
+
+
+
+
+
 
         <div class="row">
 
+
+
             <div class="form-group">
-                <label for="requestorName">Requestor Name</label>
+
+
+                <label>
+                    Requestor Name
+                </label>
+
+
                 <input
                         type="text"
-                        id="requestorName"
-                        name="requestorName"
+                        name="requestor"
+                        placeholder="Enter your name"
                         required>
+
+
             </div>
+
+
+
+
+
+
 
             <div class="form-group">
-                <label for="department">Department</label>
 
-                <select id="department" name="department" required>
-                    <option value="">Select Department</option>
-                    <option>IT</option>
-                    <option>Engineering</option>
-                    <option>Finance</option>
-                    <option>Human Resources</option>
-                    <option>Marketing</option>
-                    <option>Sales</option>
-                    <option>Operations</option>
+
+                <label>
+                    Department
+                </label>
+
+
+
+                <select name="department"
+                        required>
+
+
+                    <option value="">
+                        Select Department
+                    </option>
+
+
+                    <option value="IT">
+                        IT
+                    </option>
+
+
+                    <option value="Engineering">
+                        Engineering
+                    </option>
+
+
+                    <option value="Finance">
+                        Finance
+                    </option>
+
+
+                    <option value="Human Resources">
+                        Human Resources
+                    </option>
+
+
+                    <option value="Marketing">
+                        Marketing
+                    </option>
+
+
+                    <option value="Sales">
+                        Sales
+                    </option>
+
+
+                    <option value="Operations">
+                        Operations
+                    </option>
+
+
                 </select>
 
+
             </div>
+
 
         </div>
 
 
+
+
+
+
+
         <div class="form-group">
-            <label for="title">Ticket Title</label>
+
+
+            <label>
+                Ticket Title
+            </label>
+
+
 
             <input
                     type="text"
-                    id="title"
                     name="title"
                     maxlength="100"
+                    placeholder="Brief description of the issue"
                     required>
+
+
         </div>
+
+
+
+
+
+
 
 
         <div class="form-group">
-            <label for="description">Description</label>
+
+
+            <label>
+                Description
+            </label>
+
+
 
             <textarea
-                    id="description"
                     name="description"
                     placeholder="Describe the issue in as much detail as possible..."
                     required></textarea>
+
+
         </div>
 
 
-        <div class="row">
 
-            <div class="form-group">
-                <label for="severity">Severity</label>
 
-                <select id="severity" name="severity" required>
-                    <option value="">Select Severity</option>
-                    <option>LOW</option>
-                    <option>MEDIUM</option>
-                    <option>HIGH</option>
-                    <option>CRITICAL</option>
-                </select>
 
-            </div>
-
-            <div class="form-group">
-                <label for="contact">Contact Email</label>
-
-                <input
-                        type="email"
-                        id="contact"
-                        name="contact">
-            </div>
-
-        </div>
 
 
         <div class="buttons">
 
+
+
             <button
                     type="button"
                     class="btn btn-secondary"
-                    onclick="history.back()">
+                    onclick="window.location.href='/dashboard/'">
+
+
                 Cancel
+
+
             </button>
+
+
+
+
+
+
 
             <button
                     type="submit"
                     class="btn btn-primary">
+
+
                 Create Ticket
+
+
             </button>
+
+
+
 
         </div>
 
+
+
+
+
     </form>
+
+
+
 
 </div>
 
+
+
+
 </body>
+
 </html>

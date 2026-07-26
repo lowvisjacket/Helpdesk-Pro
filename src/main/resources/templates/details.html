@@ -8,168 +8,531 @@
     <meta charset="UTF-8">
     <title>Ticket Details</title>
 
+
     <style>
 
         *{
             margin:0;
             padding:0;
             box-sizing:border-box;
-            font-family:Arial, Helvetica, sans-serif;
+            font-family:"Inter",Arial,sans-serif;
         }
+
 
         body{
-            background:#f4f6f9;
-            color:#333;
+
+            background:#f8fafc;
+            color:#1e293b;
+
         }
 
-        header{
-            background:#1976d2;
+
+
+        /* SIDEBAR */
+
+        .sidebar{
+
+            position:fixed;
+            width:260px;
+            height:100vh;
+
+            background:#0f172a;
+
             color:white;
-            padding:20px 40px;
-            box-shadow:0 2px 10px rgba(0,0,0,.15);
+
+            padding:25px;
+
         }
 
-        header h1{
-            font-size:30px;
+
+        .brand{
+
+            font-size:24px;
+            font-weight:700;
+            margin-bottom:40px;
+
         }
 
-        .container{
-            max-width:900px;
-            margin:40px auto;
-            background:white;
-            padding:35px;
-            border-radius:12px;
-            box-shadow:0 8px 20px rgba(0,0,0,.1);
-        }
 
-        h2{
-            color:#1976d2;
-            margin-bottom:30px;
-            text-align:center;
-        }
+        .menu a{
 
-        .grid{
-            display:grid;
-            grid-template-columns:repeat(2,1fr);
-            gap:25px;
-        }
+            display:block;
 
-        .field{
-            display:flex;
-            flex-direction:column;
-        }
+            padding:12px 15px;
 
-        label{
-            font-weight:bold;
-            margin-bottom:8px;
-            color:#555;
-        }
+            color:#cbd5e1;
 
-        input,
-        select,
-        textarea{
+            text-decoration:none;
 
-            width:100%;
-            padding:12px;
-
-            border:1px solid #dcdcdc;
             border-radius:8px;
 
-            background:#f8f9fa;
-            font-size:15px;
-        }
-
-        input[readonly],
-        textarea[readonly]{
-
-            background:#eeeeee;
+            margin-bottom:8px;
 
         }
+
+
+        .menu a:hover{
+
+            background:#1e293b;
+
+            color:white;
+
+        }
+
+
+
+
+
+        /* MAIN */
+
+        .main{
+
+            margin-left:260px;
+
+        }
+
+
+
+        .header{
+
+            height:75px;
+
+            background:white;
+
+            border-bottom:1px solid #e2e8f0;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            padding:0 35px;
+
+        }
+
+
+
+
+        .logout{
+
+            background:#ef4444;
+
+            color:white;
+
+            border:none;
+
+            padding:9px 18px;
+
+            border-radius:8px;
+
+        }
+
+
+
+
+
+        .content{
+
+            padding:35px;
+
+        }
+
+
+
+
+        /* TICKET HEADER */
+
+
+        .ticket-header{
+
+            background:white;
+
+            padding:25px;
+
+            border-radius:14px;
+
+            box-shadow:0 4px 15px rgba(0,0,0,.06);
+
+            margin-bottom:25px;
+
+        }
+
+
+
+        .ticket-title{
+
+            font-size:28px;
+
+            font-weight:700;
+
+            color:#0f172a;
+
+        }
+
+
+
+        .meta{
+
+            margin-top:15px;
+
+            color:#64748b;
+
+        }
+
+
+
+
+
+        .badge{
+
+            display:inline-block;
+
+            padding:6px 14px;
+
+            border-radius:20px;
+
+            font-size:13px;
+
+            font-weight:bold;
+
+        }
+
+
+
+        .open{
+
+            background:#dcfce7;
+            color:#166534;
+
+        }
+
+
+        .progress{
+
+            background:#fef3c7;
+            color:#92400e;
+
+        }
+
+
+        .resolved{
+
+            background:#dbeafe;
+            color:#1e40af;
+
+        }
+
+
+        .closed{
+
+            background:#e5e7eb;
+            color:#374151;
+
+        }
+
+
+
+
+
+        /* INFORMATION CARD */
+
+
+        .card{
+
+            background:white;
+
+            padding:25px;
+
+            border-radius:14px;
+
+            box-shadow:0 4px 15px rgba(0,0,0,.05);
+
+            margin-bottom:25px;
+
+        }
+
+
+
+        .grid{
+
+            display:grid;
+
+            grid-template-columns:repeat(3,1fr);
+
+            gap:25px;
+
+        }
+
+
+
+        .field label{
+
+            display:block;
+
+            color:#64748b;
+
+            font-size:13px;
+
+            margin-bottom:6px;
+
+        }
+
+
+
+        .field input,
+        .field select,
+        textarea{
+
+
+            width:100%;
+
+            padding:12px;
+
+            border-radius:8px;
+
+            border:1px solid #e2e8f0;
+
+            background:#f8fafc;
+
+        }
+
+
 
         textarea{
 
-            min-height:180px;
+            min-height:160px;
+
             resize:none;
 
         }
 
-        .description{
 
-            margin-top:30px;
+
+
+        /* COMMENTS */
+
+
+        .comment{
+
+            background:#f8fafc;
+
+            border-radius:12px;
+
+            padding:18px;
+
+            margin-bottom:15px;
+
+            border-left:4px solid #2563eb;
 
         }
+
+
+
+        .comment-user{
+
+            font-weight:bold;
+
+        }
+
+
+
+        .comment-date{
+
+            float:right;
+
+            color:#64748b;
+
+            font-size:13px;
+
+        }
+
+
+
+
+
+        /* BUTTONS */
+
 
         .buttons{
 
-            margin-top:35px;
-
             display:flex;
+
             justify-content:flex-end;
+
             gap:15px;
 
+            margin-top:25px;
+
         }
+
 
 
         .btn{
 
-            padding:12px 25px;
+            padding:11px 22px;
 
             border:none;
+
             border-radius:8px;
 
             cursor:pointer;
 
-            font-size:15px;
-            font-weight:bold;
-
-            transition:.2s;
+            font-weight:600;
 
         }
+
 
 
         .primary{
 
-            background:#1976d2;
+            background:#2563eb;
+
             color:white;
 
         }
 
-        .primary:hover{
-
-            background:#1565c0;
-
-        }
 
 
         .secondary{
 
-            background:#757575;
+            background:#64748b;
+
             color:white;
 
         }
 
-        .secondary:hover{
 
-            background:#616161;
+
+        .comment-btn{
+
+            background:#0f766e;
+
+            color:white;
+
+        }
+
+
+
+
+
+        @media(max-width:1000px){
+
+        .sidebar{
+
+        display:none;
 
         }
 
 
-        @media(max-width:700px){
+        .main{
 
-            .grid{
-
-                grid-template-columns:1fr;
-
-            }
-
-            .container{
-
-                margin:20px;
-
-            }
+        margin-left:0;
 
         }
+
+
+        .grid{
+
+        grid-template-columns:1fr;
+
+        }
+
+
+        }
+
+        /* Comments */
+
+.comments-section {
+    margin-top: 40px;
+}
+
+.comments-title {
+    color:#1976d2;
+    font-size:24px;
+    margin-bottom:20px;
+}
+
+
+.comment-card {
+    background:#ffffff;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 3px 8px rgba(0,0,0,.06);
+    transition:.2s;
+}
+
+.comment-card:hover {
+    box-shadow:0 5px 14px rgba(0,0,0,.1);
+}
+
+
+.comment-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+
+.comment-user {
+    font-weight:bold;
+    color:#1976d2;
+}
+
+
+.comment-date {
+    color:#777;
+    font-size:.85rem;
+}
+
+
+.comment-body {
+    color:#444;
+    line-height:1.5;
+}
+
+
+.no-comments {
+    background:#f8fafc;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+    color:#777;
+}
+
+
+
+/* Add comment box */
+
+.add-comment {
+    margin-top:30px;
+    background:#f8fafc;
+    border-radius:12px;
+    padding:25px;
+    border:1px solid #e2e8f0;
+}
+
+
+.add-comment textarea {
+
+    min-height:120px;
+    resize:vertical;
+    background:white;
+
+}
+
+
+.comment-button {
+
+    margin-top:15px;
+    display:flex;
+    justify-content:flex-end;
+
+}
+
 
 
     </style>
@@ -177,264 +540,124 @@
 </head>
 
 
+
 <body>
 
 
-<header>
-
-    <h1>Ticket Details</h1>
-
-</header>
+<div class="sidebar">
 
 
-
-<div class="container">
-
-
-    <form th:action="@{/tickets/{id}/update(id=${ticket.id})}"
-          method="post">
+    <div class="brand">
+        HelpDesk Pro
+    </div>
 
 
+    <div class="menu">
 
-        <h2 th:text="${ticket.title}">
-            Ticket Title
+        <a href="/dashboard/">
+            Dashboard
+        </a>
+
+        <a href="/dashboard/users">
+            Users
+        </a>
+
+        <a href="/dashboard/reports">
+            Reports
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="main">
+
+
+
+    <div class="header">
+
+        <h2>
+            Ticket Details
         </h2>
 
 
+        <form th:action="@{/logout}" method="post">
 
-
-        <div class="grid">
-
-
-
-            <!-- Assigned Agent -->
-
-            <div class="field">
-
-                <label>Assigned Agent</label>
-
-
-                <select name="agent"
-                        sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')">
-
-
-                    <option value="">
-                        Unassigned
-                    </option>
-
-
-                    <option th:each="agent : ${agents}"
-
-                            th:if="${agent.department == ticket.department}"
-
-                            th:value="${ticket.agent}"
-
-                            th:selected="${agent.first_name + ' ' + agent.last_name == ticket.agent}"
-
-                            th:text="${agent.first_name + ' ' + agent.last_name}">
-
-                    </option>
-
-
-                </select>
-
-
-
-<!--                <input readonly-->
-
-<!--                       sec:authorize="!hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')"-->
-
-<!--                       th:value="${ticket.agent == null ? 'Unassigned' : ticket.agent}">-->
-
-
-            </div>
-
-
-
-
-
-            <!-- Status -->
-
-
-            <div class="field">
-
-
-                <label>Status</label>
-
-
-                <select name="status"
-
-                        sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')">
-
-
-                    <option value="OPEN"
-                            th:selected="${ticket.ticket_status == 'OPEN'}">
-                        OPEN
-                    </option>
-
-
-                    <option value="IN_PROGRESS"
-                            th:selected="${ticket.ticket_status == 'IN_PROGRESS'}">
-                        IN PROGRESS
-                    </option>
-
-
-                    <option value="RESOLVED"
-                            th:selected="${ticket.ticket_status == 'RESOLVED'}">
-                        RESOLVED
-                    </option>
-
-
-                    <option value="CLOSED"
-                            th:selected="${ticket.ticket_status == 'CLOSED'}">
-                        CLOSED
-                    </option>
-
-
-                </select>
-
-
-
-<!--                <input readonly-->
-
-<!--                       sec:authorize="!hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')"-->
-
-<!--                       th:value="${ticket.ticket_status}">-->
-
-
-            </div>
-
-
-
-
-
-            <!-- Importance -->
-
-
-            <div class="field">
-
-                <label>Importance</label>
-
-
-                <input readonly
-
-                       th:value="${ticket.importance}">
-
-
-            </div>
-
-
-
-
-
-            <!-- Department -->
-
-
-            <div class="field">
-
-                <label>Department</label>
-
-
-                <input readonly
-
-                       th:value="${ticket.department}">
-
-
-            </div>
-
-
-
-
-
-            <!-- Date -->
-
-
-            <div class="field">
-
-                <label>Date</label>
-
-
-                <input readonly
-
-                       th:value="${ticket.ticket_date}">
-
-
-            </div>
-
-
-
-
-
-            <!-- Time -->
-
-
-            <div class="field">
-
-                <label>Time</label>
-
-
-                <input readonly
-
-                       th:value="${ticket.ticket_time}">
-
-
-            </div>
-
-
-
-        </div>
-
-
-
-
-
-        <!-- Description -->
-
-
-        <div class="description">
-
-
-            <label>Description</label>
-
-
-            <textarea readonly
-
-                      th:text="${ticket.description}">
-
-    </textarea>
-
-
-        </div>
-
-
-
-
-
-        <div class="buttons">
-
-
-            <button type="button"
-
-                    class="btn secondary"
-
-                    onclick="history.back()">
-
-                Back
-
+            <button class="logout">
+                Logout
             </button>
 
+        </form>
+
+
+    </div>
 
 
 
-            <button type="submit"
 
-                    class="btn primary"
 
-                    sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')">
+    <div class="content">
 
-                Save Changes
 
-            </button>
+
+
+
+        <div class="ticket-header">
+
+
+            <div class="ticket-title"
+                 th:text="${ticket.title}">
+                Ticket Title
+            </div>
+
+
+
+            <div class="meta">
+
+<span>
+Department:
+</span>
+
+                <strong th:text="${ticket.department}">
+                </strong>
+
+
+                <br>
+
+
+                <span>
+Created:
+</span>
+
+
+                <strong th:text="${ticket.ticketDate + ' ' + ticket.ticketTime}">
+                </strong>
+
+
+            </div>
+
+
+
+            <br>
+
+
+            <span class="badge"
+
+                  th:classappend="
+${ticket.ticketStatus=='OPEN'}?' open':
+(${ticket.ticketStatus=='IN_PROGRESS'}?' progress':
+(${ticket.ticketStatus=='RESOLVED'}?' resolved':' closed'))"
+
+                  th:text="${ticket.ticketStatus}">
+
+</span>
+
 
 
         </div>
@@ -442,7 +665,342 @@
 
 
 
-    </form>
+
+
+        <form th:action="@{/tickets/{id}/update(id=${ticket.id})}"
+              method="post">
+
+
+            <div class="card">
+
+
+                <h3>
+                    Ticket Information
+                </h3>
+
+
+                <br>
+
+
+                <div class="grid">
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Assigned Agent
+                        </label>
+
+
+                        <div sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+
+                            <select name="agentUsername">
+
+                                <option value="">
+                                    Unassigned
+                                </option>
+
+                                <option th:each="agent:${agents}"
+                                        th:value="${agent.username}"
+                                        th:selected="${agent.username == ticket.agentUsername}"
+                                        th:text="${agent.firstName + ' ' + agent.lastName}">
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <input readonly
+                               sec:authorize="!hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')"
+                               th:value="${ticket.agent ?: 'Unassigned'}">
+
+
+                    </div>
+
+
+
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Status
+                        </label>
+
+
+                        <div sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+
+                            <select name="ticketStatus">
+
+
+                                <option value="OPEN"
+                                        th:selected="${ticket.ticketStatus=='OPEN'}">
+                                    OPEN
+                                </option>
+
+
+                                <option value="IN_PROGRESS"
+                                        th:selected="${ticket.ticketStatus=='IN_PROGRESS'}">
+                                    IN PROGRESS
+                                </option>
+
+
+                                <option value="RESOLVED"
+                                        th:selected="${ticket.ticketStatus=='RESOLVED'}">
+                                    RESOLVED
+                                </option>
+
+
+                                <option value="CLOSED"
+                                        th:selected="${ticket.ticketStatus=='CLOSED'}">
+                                    CLOSED
+                                </option>
+
+
+                            </select>
+
+                        </div>
+
+
+
+                        <input readonly
+                               sec:authorize="!hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')"
+                               th:value="${ticket.ticketStatus}">
+
+
+                    </div>
+
+
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Priority
+                        </label>
+
+
+                        <div sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+
+                            <select name="importance">
+
+
+                                <option value="LOW"
+                                        th:selected="${ticket.importance=='LOW'}">
+                                    LOW
+                                </option>
+
+
+                                <option value="MEDIUM"
+                                        th:selected="${ticket.importance=='MEDIUM'}">
+                                    MEDIUM
+                                </option>
+
+
+                                <option value="HIGH"
+                                        th:selected="${ticket.importance=='HIGH'}">
+                                    HIGH
+                                </option>
+
+
+                                <option value="CRITICAL"
+                                        th:selected="${ticket.importance=='CRITICAL'}">
+                                    CRITICAL
+                                </option>
+
+
+                            </select>
+
+                        </div>
+
+
+
+                        <input readonly
+                               sec:authorize="!hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')"
+                               th:value="${ticket.importance}">
+
+
+                    </div>
+
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Date
+                        </label>
+
+
+                        <input readonly th:value="${ticket.ticketDate}">
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Time
+                        </label>
+
+
+                        <input readonly th:value="${ticket.ticketTime}">
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+                <br>
+
+
+                <label>
+                    Description
+                </label>
+
+
+                <textarea readonly
+                          th:text="${ticket.description}">
+</textarea>
+
+
+
+
+                <div class="buttons">
+
+
+                    <button type="button"
+                            class="btn secondary"
+                            onclick="window.location.href='/dashboard/'">
+
+                        Home
+
+                    </button>
+
+
+
+                    <button type="submit"
+                            class="btn primary"
+                            sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+
+                        Save Changes
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </form>
+
+
+
+
+
+        <div class="card">
+
+
+            <h3>
+                Conversation
+            </h3>
+
+
+            <br>
+
+
+
+            <div th:if="${#lists.isEmpty(ticket.notes)}">
+
+                No comments yet.
+
+            </div>
+
+
+
+
+            <div class="comment"
+                 th:each="note:${ticket.notes}">
+
+
+                <div class="comment-user"
+                     th:text="${note.username}">
+                    User
+                </div>
+
+
+
+                <div class="comment-date"
+                     th:text="${note.createdAt}">
+                    Date
+                </div>
+
+
+
+                <br>
+
+
+                <p th:text="${note.note}">
+                    Comment
+                </p>
+
+
+            </div>
+
+
+            <br>
+
+
+            <h3>
+                Add Comment
+            </h3>
+
+
+            <form th:action="@{/tickets/{id}/newcomment(id=${ticket.id})}"
+                  method="post">
+
+
+<textarea name="note"
+          placeholder="Write a reply..."
+          required></textarea>
+
+
+                <div class="buttons">
+
+
+                    <button class="btn comment-btn">
+
+                        Add Comment
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+
+        </div>
+
+
+
+
+
+    </div>
 
 
 </div>
