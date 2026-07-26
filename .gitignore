@@ -37,3 +37,10 @@ build/
 !/src/main/java/org/dev/ticketing_software/Data/Tickets/TicketStructure.txt
 !/HELP.md
 !/src/main/java/org/dev/ticketing_software/TestData/
+
+## Certificates ##
+!/baeldung.p12
+!/src/main/java/org/dev/ticketing_software/Security/Config/SSL.java
+!/src/main/java/org/dev/ticketing_software/Security/Config/SSL.java
+!/src/main/java/org/dev/ticketing_software/Security/Config/AuthConfiguration.java
+!/pom.xml

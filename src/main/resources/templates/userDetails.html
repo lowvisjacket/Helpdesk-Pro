@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>User Details</title>
+
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:"Inter",Arial,sans-serif;
+        }
+
+
+        body{
+            background:#f8fafc;
+            color:#1e293b;
+        }
+
+
+        /* SIDEBAR */
+
+        .sidebar{
+
+            position:fixed;
+
+            width:260px;
+
+            height:100vh;
+
+            background:#0f172a;
+
+            color:white;
+
+            padding:25px;
+
+        }
+
+
+
+        .brand{
+
+            font-size:24px;
+
+            font-weight:700;
+
+            margin-bottom:40px;
+
+        }
+
+
+
+        .menu a{
+
+            display:block;
+
+            padding:12px 15px;
+
+            color:#cbd5e1;
+
+            text-decoration:none;
+
+            border-radius:8px;
+
+            margin-bottom:8px;
+
+        }
+
+
+
+        .menu a:hover{
+
+            background:#1e293b;
+
+            color:white;
+
+        }
+
+
+
+
+
+        /* MAIN */
+
+        .main{
+
+            margin-left:260px;
+
+        }
+
+
+
+
+        .header{
+
+            height:75px;
+
+            background:white;
+
+            border-bottom:1px solid #e2e8f0;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            padding:0 35px;
+
+        }
+
+
+
+
+        .logout{
+
+            background:#ef4444;
+
+            color:white;
+
+            border:none;
+
+            padding:10px 18px;
+
+            border-radius:8px;
+
+            cursor:pointer;
+
+        }
+
+
+
+
+
+        .content{
+
+            padding:35px;
+
+        }
+
+
+
+
+        .card{
+
+            background:white;
+
+            border-radius:14px;
+
+            padding:30px;
+
+            box-shadow:0 4px 15px rgba(0,0,0,.06);
+
+            max-width:900px;
+
+        }
+
+
+
+
+
+        .title{
+
+            font-size:28px;
+
+            font-weight:700;
+
+            margin-bottom:30px;
+
+        }
+
+
+
+
+
+        .grid{
+
+            display:grid;
+
+            grid-template-columns:repeat(2,1fr);
+
+            gap:25px;
+
+        }
+
+
+
+
+        .field label{
+
+            display:block;
+
+            color:#64748b;
+
+            font-size:13px;
+
+            margin-bottom:7px;
+
+        }
+
+
+
+
+        .field input,
+        .field select{
+
+
+            width:100%;
+
+            padding:12px;
+
+            border-radius:8px;
+
+            border:1px solid #e2e8f0;
+
+            background:#f8fafc;
+
+        }
+
+
+
+
+        input[readonly]{
+
+            background:#e2e8f0;
+
+        }
+
+
+
+
+
+        .badge{
+
+            display:inline-block;
+
+            padding:7px 14px;
+
+            border-radius:20px;
+
+            font-size:13px;
+
+            font-weight:bold;
+
+        }
+
+
+
+        .active{
+
+            background:#dcfce7;
+
+            color:#166534;
+
+        }
+
+
+
+        .disabled{
+
+            background:#fee2e2;
+
+            color:#991b1b;
+
+        }
+
+
+
+
+        .buttons{
+
+            display:flex;
+
+            justify-content:flex-end;
+
+            gap:15px;
+
+            margin-top:35px;
+
+        }
+
+
+
+        .btn{
+
+            padding:11px 22px;
+
+            border:none;
+
+            border-radius:8px;
+
+            cursor:pointer;
+
+            font-weight:600;
+
+        }
+
+
+
+        .primary{
+
+            background:#2563eb;
+
+            color:white;
+
+        }
+
+
+
+        .warning{
+
+            background:#f59e0b;
+
+            color:white;
+
+        }
+
+
+
+        .secondary{
+
+            background:#64748b;
+
+            color:white;
+
+        }
+
+
+
+
+
+        @media(max-width:900px){
+
+
+        .sidebar{
+
+            display:none;
+
+        }
+
+
+        .main{
+
+            margin-left:0;
+
+        }
+
+
+
+        .grid{
+
+            grid-template-columns:1fr;
+
+        }
+
+
+
+        }
+
+
+
+    </style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+
+    <div class="brand">
+        HelpDesk Pro
+    </div>
+
+
+
+    <div class="menu">
+
+
+        <a href="/dashboard/">
+            Dashboard
+        </a>
+
+        <a href="/dashboard/users"
+           sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+
+            Users
+
+        </a>
+
+        <a href="/dashboard/reports">
+            Reports
+        </a>
+
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- MAIN -->
+
+
+<div class="main">
+
+
+    <div class="header">
+
+
+        <h2>
+            User Details
+        </h2>
+
+
+
+        <form th:action="@{/logout}"
+              method="post">
+
+
+            <button class="logout">
+                Logout
+            </button>
+
+
+        </form>
+
+
+    </div>
+
+
+
+
+
+
+    <div class="content">
+
+
+
+        <div class="card">
+
+
+
+            <div class="title"
+                 th:text="${user.firstName + ' ' + user.lastName}">
+
+                User Name
+
+            </div>
+
+
+
+
+
+            <form th:action="@{/dashboard/users/{username}/update(username=${user.username})}"
+                  method="post">
+
+
+
+
+
+
+                <div class="grid">
+
+
+
+
+
+                    <!-- FIRST NAME -->
+
+
+                    <div class="field">
+
+                        <label>
+                            First Name
+                        </label>
+
+                        <div sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+                            <input name="firstName"
+                                   th:value="${user.firstName}">
+                        </div>
+
+                        <div sec:authorize="hasAnyAuthority('USER', 'TECHNICIAN')">
+                            <input readonly
+                                   th:value="${user.firstName}">
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+                    <!-- LAST NAME -->
+
+
+                    <div class="field">
+
+
+                        <label>
+                            Last Name
+                        </label>
+
+
+
+                        <input name="lastName"
+                               th:value="${user.lastName}"
+                               sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+
+
+
+                        <input readonly
+                               th:value="${user.lastName}"
+                               sec:authorize="hasAnyAuthority('TECHNICIAN')">
+
+
+                    </div>
+
+
+
+
+
+
+
+                    <!-- USERNAME -->
+
+
+                    <div class="field">
+
+
+                        <label>
+                            Username
+                        </label>
+
+
+
+                        <input readonly
+                               th:value="${user.username}">
+
+
+                    </div>
+
+
+
+
+
+
+
+                    <!-- DEPARTMENT -->
+
+                    <div class="field">
+
+                        <label>
+                            Department
+                        </label>
+
+
+                        <!-- Editable dropdown for admins -->
+                        <select name="department"
+                                sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+
+
+                            <option value="IT"
+                                    th:selected="${user.department == 'IT'}">
+                                IT
+                            </option>
+
+
+                            <option value="Engineering"
+                                    th:selected="${user.department == 'Engineering'}">
+                                Engineering
+                            </option>
+
+
+                            <option value="Finance"
+                                    th:selected="${user.department == 'Finance'}">
+                                Finance
+                            </option>
+
+
+                            <option value="Human Resources"
+                                    th:selected="${user.department == 'Human Resources'}">
+                                Human Resources
+                            </option>
+
+
+                            <option value="Marketing"
+                                    th:selected="${user.department == 'Marketing'}">
+                                Marketing
+                            </option>
+
+
+                            <option value="Sales"
+                                    th:selected="${user.department == 'Sales'}">
+                                Sales
+                            </option>
+
+
+                            <option value="Operations"
+                                    th:selected="${user.department == 'Operations'}">
+                                Operations
+                            </option>
+
+
+                        </select>
+
+
+
+                        <!-- Read only for technicians/users -->
+                        <input readonly
+                               th:value="${user.department}"
+                               sec:authorize="!hasAnyAuthority('ADMIN','SYSADMIN')">
+
+
+                    </div>
+
+
+
+
+
+
+
+                    <!-- ROLE -->
+
+
+                    <div class="field">
+
+
+                        <label>
+                            Role
+                        </label>
+
+
+
+                        <select name="role"
+                                sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+
+
+                            <option value="USER"
+                                    th:selected="${user.role=='USER'}">
+                                USER
+                            </option>
+
+
+                            <option value="TECHNICIAN"
+                                    th:selected="${user.role=='TECHNICIAN'}">
+                                TECHNICIAN
+                            </option>
+
+
+                            <option value="ADMIN"
+                                    th:selected="${user.role=='ADMIN'}">
+                                ADMIN
+                            </option>
+
+
+                            <option value="SYSADMIN"
+                                    th:selected="${user.role=='SYSADMIN'}">
+                                SYSADMIN
+                            </option>
+
+
+                        </select>
+
+
+
+
+                        <input readonly
+                               th:value="${user.role}"
+                               sec:authorize="hasRole('TECHNICIAN')">
+
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <!-- STATUS -->
+
+
+                    <div class="field">
+
+
+                        <label>
+                            Account Status
+                        </label>
+
+
+
+                        <span class="badge"
+                              th:classappend="${user.accountStatus} ? 'active':'disabled'"
+                              th:text="${user.accountStatus ? 'Active':'Disabled'}">
+
+</span>
+
+
+
+                    </div>
+
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+                <div class="buttons">
+
+
+
+                    <button type="button"
+                            class="btn secondary"
+                            onclick="window.location.href='/dashboard/users'">
+
+                        Back
+
+                    </button>
+
+
+
+
+
+
+                    <button type="submit"
+                            class="btn primary"
+                            sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+
+                        Save Changes
+
+                    </button>
+
+
+
+                </div>
+
+
+
+
+
+            </form>
+
+
+
+
+
+
+            <!-- ENABLE / DISABLE -->
+
+
+            <form th:action="@{/dashboard/users/{username}/toggle(username=${user.username})}"
+                  method="post"
+                  sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+
+
+
+                <div class="buttons">
+
+
+                    <button class="btn warning"
+                            type="submit"
+                            th:text="${user.accountStatus ? 'Disable Account':'Enable Account'}">
+
+
+                        Disable Account
+
+
+                    </button>
+
+
+
+                </div>
+
+
+            </form>
+
+
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+
+</body>
+
+</html>
