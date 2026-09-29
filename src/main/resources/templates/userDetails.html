@@ -396,7 +396,7 @@
         </a>
 
         <a href="/dashboard/users"
-           sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+           sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')">
 
             Users
 
@@ -495,12 +495,12 @@
                             First Name
                         </label>
 
-                        <div sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+                        <div sec:authorize="hasAnyRole('ADMIN','SYSADMIN')">
                             <input name="firstName"
                                    th:value="${user.firstName}">
                         </div>
 
-                        <div sec:authorize="hasAnyAuthority('USER', 'TECHNICIAN')">
+                        <div sec:authorize="hasAnyRole('USER', 'TECHNICIAN')">
                             <input readonly
                                    th:value="${user.firstName}">
                         </div>
@@ -526,13 +526,13 @@
 
                         <input name="lastName"
                                th:value="${user.lastName}"
-                               sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+                               sec:authorize="hasAnyRole('ADMIN','SYSADMIN')">
 
 
 
                         <input readonly
                                th:value="${user.lastName}"
-                               sec:authorize="hasAnyAuthority('TECHNICIAN')">
+                               sec:authorize="hasAnyRole('TECHNICIAN')">
 
 
                     </div>
@@ -578,48 +578,54 @@
 
                         <!-- Editable dropdown for admins -->
                         <select name="department"
-                                sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+                                sec:authorize="hasAnyRole('ADMIN','SYSADMIN')">
 
 
-                            <option value="IT"
-                                    th:selected="${user.department == 'IT'}">
-                                IT
+                            <option value="INFORMATION_TECHNOLOGY"
+                                    th:selected="${user.department == 'INFORMATION_TECHNOLOGY'}">
+                                Information Technology
                             </option>
 
 
-                            <option value="Engineering"
-                                    th:selected="${user.department == 'Engineering'}">
-                                Engineering
-                            </option>
-
-
-                            <option value="Finance"
-                                    th:selected="${user.department == 'Finance'}">
-                                Finance
-                            </option>
-
-
-                            <option value="Human Resources"
-                                    th:selected="${user.department == 'Human Resources'}">
+                            <option value="HUMAN_RESOURCES"
+                                    th:selected="${user.department == 'HUMAN_RESOURCES'}">
                                 Human Resources
                             </option>
 
 
-                            <option value="Marketing"
-                                    th:selected="${user.department == 'Marketing'}">
+                            <option value="ENGINEERING"
+                                    th:selected="${user.department == 'ENGINEERING'}">
+                                Engineering
+                            </option>
+
+
+                            <option value="MAINTENANCE"
+                                    th:selected="${user.department == 'MAINTENANCE'}">
+                                Maintenance
+                            </option>
+
+
+                            <option value="CLINICAL_INFORMATICS"
+                                    th:selected="${user.department == 'CLINICAL_INFORMATICS'}">
+                                Clinical Informatics
+                            </option>
+
+
+                            <option value="SECURITY"
+                                    th:selected="${user.department == 'SECURITY'}">
+                                Security
+                            </option>
+
+
+                            <option value="MARKETING"
+                                    th:selected="${user.department == 'MARKETING'}">
                                 Marketing
                             </option>
 
 
-                            <option value="Sales"
-                                    th:selected="${user.department == 'Sales'}">
-                                Sales
-                            </option>
-
-
-                            <option value="Operations"
-                                    th:selected="${user.department == 'Operations'}">
-                                Operations
+                            <option value="FINANCE"
+                                    th:selected="${user.department == 'FINANCE'}">
+                                Finance
                             </option>
 
 
@@ -630,7 +636,7 @@
                         <!-- Read only for technicians/users -->
                         <input readonly
                                th:value="${user.department}"
-                               sec:authorize="!hasAnyAuthority('ADMIN','SYSADMIN')">
+                               sec:authorize="!hasAnyRole('ADMIN','SYSADMIN')">
 
 
                     </div>
@@ -654,7 +660,7 @@
 
 
                         <select name="role"
-                                sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+                                sec:authorize="hasAnyRole('ADMIN','SYSADMIN')">
 
 
                             <option value="USER"
@@ -754,7 +760,7 @@
 
                     <button type="submit"
                             class="btn primary"
-                            sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+                            sec:authorize="hasAnyRole('ADMIN','SYSADMIN')">
 
                         Save Changes
 
@@ -780,7 +786,7 @@
 
             <form th:action="@{/dashboard/users/{username}/toggle(username=${user.username})}"
                   method="post"
-                  sec:authorize="hasAnyAuthority('ADMIN','SYSADMIN')">
+                  sec:authorize="hasAnyRole('ADMIN','SYSADMIN')">
 
 
 

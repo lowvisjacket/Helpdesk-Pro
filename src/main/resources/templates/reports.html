@@ -634,14 +634,14 @@
 
 
         <a href="/dashboard/users"
-           sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+           sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')">
             Users
         </a>
 
 
 
 
-        <a href="/reports">
+        <a href="/dashboard/reports">
 
             Reports
 

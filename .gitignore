@@ -1,5 +1,7 @@
 HELP.md
 target/
+.DS_Store
+/baeldung.p12
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -31,16 +33,6 @@ build/
 
 ### VS Code ###
 .vscode/
+application.properties
+.env
 
-## Config Files ##
-!/application.properties
-!/src/main/java/org/dev/ticketing_software/Data/Tickets/TicketStructure.txt
-!/HELP.md
-!/src/main/java/org/dev/ticketing_software/TestData/
-
-## Certificates ##
-!/baeldung.p12
-!/src/main/java/org/dev/ticketing_software/Security/Config/SSL.java
-!/src/main/java/org/dev/ticketing_software/Security/Config/SSL.java
-!/src/main/java/org/dev/ticketing_software/Security/Config/AuthConfiguration.java
-!/pom.xml
