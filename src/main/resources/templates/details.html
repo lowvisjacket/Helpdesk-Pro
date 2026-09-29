@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -533,12 +533,70 @@
 
 }
 
+        .comment-wrapper{
+    display:flex;
+    margin-bottom:18px;
+}
+
+.comment{
+    max-width:70%;
+    padding:18px;
+    border-radius:14px;
+    word-wrap:break-word;
+}
+
+.comment-header{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+    gap:20px;
+}
+
+.comment-user{
+    font-weight:bold;
+}
+
+.comment-date{
+    font-size:12px;
+    opacity:.8;
+}
+
+/* Other users (left) */
+
+.other-comment{
+    justify-content:flex-start;
+}
+
+.other-comment .comment{
+    background:#f1f5f9;
+    border-left:4px solid #64748b;
+}
+
+.other-comment .comment-user{
+    color:#475569;
+}
+
+/* Logged-in user (right) */
+
+.own-comment{
+    justify-content:flex-end;
+}
+
+.own-comment .comment{
+    background:#2563eb;
+    color:white;
+    border-right:4px solid #1d4ed8;
+}
+
+.own-comment .comment-user,
+.own-comment .comment-date{
+    color:white;
+}
 
 
     </style>
 
 </head>
-
 
 
 <body>
@@ -573,11 +631,7 @@
 </div>
 
 
-
-
-
 <div class="main">
-
 
 
     <div class="header">
@@ -587,7 +641,7 @@
         </h2>
 
 
-        <form th:action="@{/logout}" method="post">
+        <form method="post" th:action="@{/logout}">
 
             <button class="logout">
                 Logout
@@ -599,13 +653,7 @@
     </div>
 
 
-
-
-
     <div class="content">
-
-
-
 
 
         <div class="ticket-header">
@@ -615,7 +663,6 @@
                  th:text="${ticket.title}">
                 Ticket Title
             </div>
-
 
 
             <div class="meta">
@@ -643,7 +690,6 @@ Created:
             </div>
 
 
-
             <br>
 
 
@@ -659,16 +705,11 @@ ${ticket.ticketStatus=='OPEN'}?' open':
 </span>
 
 
-
         </div>
 
 
-
-
-
-
-        <form th:action="@{/tickets/{id}/update(id=${ticket.id})}"
-              method="post">
+        <form method="post"
+              th:action="@{/tickets/{id}/update(id=${ticket.id})}">
 
 
             <div class="card">
@@ -685,7 +726,6 @@ ${ticket.ticketStatus=='OPEN'}?' open':
                 <div class="grid">
 
 
-
                     <div class="field">
 
                         <label>
@@ -693,7 +733,7 @@ ${ticket.ticketStatus=='OPEN'}?' open':
                         </label>
 
 
-                        <div sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+                        <div sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')">
 
                             <select name="agentUsername">
 
@@ -701,10 +741,10 @@ ${ticket.ticketStatus=='OPEN'}?' open':
                                     Unassigned
                                 </option>
 
-                                <option th:each="agent:${agents}"
-                                        th:value="${agent.username}"
+                                <option th:each="agent : ${agents}"
                                         th:selected="${agent.username == ticket.agentUsername}"
-                                        th:text="${agent.firstName + ' ' + agent.lastName}">
+                                        th:text="${agent.firstName + ' ' + agent.lastName + (agent.username == #authentication.name ? ' (Me)' : '')}"
+                                        th:value="${agent.username}">
                                 </option>
 
                             </select>
@@ -712,17 +752,12 @@ ${ticket.ticketStatus=='OPEN'}?' open':
                         </div>
 
 
-
                         <input readonly
-                               sec:authorize="!hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')"
+                               sec:authorize="!hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')"
                                th:value="${ticket.agent ?: 'Unassigned'}">
 
 
                     </div>
-
-
-
-
 
 
                     <div class="field">
@@ -732,31 +767,41 @@ ${ticket.ticketStatus=='OPEN'}?' open':
                         </label>
 
 
-                        <div sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+                        <div sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')">
 
                             <select name="ticketStatus">
 
 
-                                <option value="OPEN"
-                                        th:selected="${ticket.ticketStatus=='OPEN'}">
+                                <option th:selected="${ticket.ticketStatus=='OPEN'}"
+                                        value="OPEN">
                                     OPEN
                                 </option>
 
+                                <option th:selected="${ticket.ticketStatus=='PENDING'}"
+                                        value="PENDING">
+                                    PENDING
+                                </option>
 
-                                <option value="IN_PROGRESS"
-                                        th:selected="${ticket.ticketStatus=='IN_PROGRESS'}">
+                                <option th:selected="${ticket.ticketStatus=='PAUSED'}"
+                                        value="PAUSED">
+                                    PAUSED
+                                </option>
+
+
+                                <option th:selected="${ticket.ticketStatus=='IN_PROGRESS'}"
+                                        value="IN_PROGRESS">
                                     IN PROGRESS
                                 </option>
 
 
-                                <option value="RESOLVED"
-                                        th:selected="${ticket.ticketStatus=='RESOLVED'}">
+                                <option th:selected="${ticket.ticketStatus=='RESOLVED'}"
+                                        value="RESOLVED">
                                     RESOLVED
                                 </option>
 
 
-                                <option value="CLOSED"
-                                        th:selected="${ticket.ticketStatus=='CLOSED'}">
+                                <option th:selected="${ticket.ticketStatus=='CLOSED'}"
+                                        value="CLOSED">
                                     CLOSED
                                 </option>
 
@@ -766,16 +811,12 @@ ${ticket.ticketStatus=='OPEN'}?' open':
                         </div>
 
 
-
                         <input readonly
-                               sec:authorize="!hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')"
+                               sec:authorize="!hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')"
                                th:value="${ticket.ticketStatus}">
 
 
                     </div>
-
-
-
 
 
                     <div class="field">
@@ -785,31 +826,31 @@ ${ticket.ticketStatus=='OPEN'}?' open':
                         </label>
 
 
-                        <div sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+                        <div sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')">
 
                             <select name="importance">
 
 
-                                <option value="LOW"
-                                        th:selected="${ticket.importance=='LOW'}">
+                                <option th:selected="${ticket.importance=='LOW'}"
+                                        value="LOW">
                                     LOW
                                 </option>
 
 
-                                <option value="MEDIUM"
-                                        th:selected="${ticket.importance=='MEDIUM'}">
+                                <option th:selected="${ticket.importance=='MEDIUM'}"
+                                        value="MEDIUM">
                                     MEDIUM
                                 </option>
 
 
-                                <option value="HIGH"
-                                        th:selected="${ticket.importance=='HIGH'}">
+                                <option th:selected="${ticket.importance=='HIGH'}"
+                                        value="HIGH">
                                     HIGH
                                 </option>
 
 
-                                <option value="CRITICAL"
-                                        th:selected="${ticket.importance=='CRITICAL'}">
+                                <option th:selected="${ticket.importance=='CRITICAL'}"
+                                        value="CRITICAL">
                                     CRITICAL
                                 </option>
 
@@ -819,15 +860,12 @@ ${ticket.ticketStatus=='OPEN'}?' open':
                         </div>
 
 
-
                         <input readonly
-                               sec:authorize="!hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')"
+                               sec:authorize="!hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')"
                                th:value="${ticket.importance}">
 
 
                     </div>
-
-
 
 
                     <div class="field">
@@ -842,7 +880,6 @@ ${ticket.ticketStatus=='OPEN'}?' open':
                     </div>
 
 
-
                     <div class="field">
 
                         <label>
@@ -855,10 +892,7 @@ ${ticket.ticketStatus=='OPEN'}?' open':
                     </div>
 
 
-
                 </div>
-
-
 
 
                 <br>
@@ -874,24 +908,21 @@ ${ticket.ticketStatus=='OPEN'}?' open':
 </textarea>
 
 
-
-
                 <div class="buttons">
 
 
-                    <button type="button"
-                            class="btn secondary"
-                            onclick="window.location.href='/dashboard/'">
+                    <button class="btn secondary"
+                            onclick="window.location.href='/dashboard/'"
+                            type="button">
 
                         Home
 
                     </button>
 
 
-
-                    <button type="submit"
-                            class="btn primary"
-                            sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+                    <button class="btn primary"
+                            sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')"
+                            type="submit">
 
                         Save Changes
 
@@ -907,9 +938,6 @@ ${ticket.ticketStatus=='OPEN'}?' open':
         </form>
 
 
-
-
-
         <div class="card">
 
 
@@ -921,7 +949,6 @@ ${ticket.ticketStatus=='OPEN'}?' open':
             <br>
 
 
-
             <div th:if="${#lists.isEmpty(ticket.notes)}">
 
                 No comments yet.
@@ -929,33 +956,27 @@ ${ticket.ticketStatus=='OPEN'}?' open':
             </div>
 
 
+            <div class="comment-wrapper"
+                 th:classappend="${note.username == username} ? ' own-comment' : ' other-comment'"
+                 th:each="note : ${ticket.notes}">
 
+                <div class="comment">
 
-            <div class="comment"
-                 th:each="note:${ticket.notes}">
+                    <div class="comment-header">
 
+            <span class="comment-user"
+                  th:text="${note.username}">
+            </span>
 
-                <div class="comment-user"
-                     th:text="${note.username}">
-                    User
+                        <span class="comment-date"
+                              th:text="${note.ticketNoteDate}">
+            </span>
+
+                    </div>
+
+                    <p th:text="${note.note}"></p>
+
                 </div>
-
-
-
-                <div class="comment-date"
-                     th:text="${note.createdAt}">
-                    Date
-                </div>
-
-
-
-                <br>
-
-
-                <p th:text="${note.note}">
-                    Comment
-                </p>
-
 
             </div>
 
@@ -968,8 +989,8 @@ ${ticket.ticketStatus=='OPEN'}?' open':
             </h3>
 
 
-            <form th:action="@{/tickets/{id}/newcomment(id=${ticket.id})}"
-                  method="post">
+            <form method="post"
+                  th:action="@{/tickets/{id}/newnote(id=${ticket.id})}">
 
 
 <textarea name="note"
@@ -993,11 +1014,7 @@ ${ticket.ticketStatus=='OPEN'}?' open':
             </form>
 
 
-
         </div>
-
-
-
 
 
     </div>

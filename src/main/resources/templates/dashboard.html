@@ -443,6 +443,45 @@
 
 
         }
+        .filters{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.filters select,
+.filters input{
+    padding:10px 12px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    background:white;
+    font-size:14px;
+    min-width:160px;
+}
+
+.filters button{
+    padding:10px 18px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    font-weight:500;
+}
+
+.filters button:hover{
+    background:#1d4ed8;
+}
+
+.filters .clear{
+    background:#6b7280;
+}
+
+.filters .clear:hover{
+    background:#4b5563;
+}
 
 
     </style>
@@ -453,14 +492,12 @@
 <body>
 
 
-
 <div class="sidebar">
 
 
     <div class="brand">
         HelpDesk Pro
     </div>
-
 
 
     <div class="menu">
@@ -483,10 +520,7 @@
 </div>
 
 
-
-
 <div class="main">
-
 
 
     <header class="top-header">
@@ -520,13 +554,7 @@ User
     </header>
 
 
-
-
-
     <div class="content">
-
-
-
 
 
         <div class="summary">
@@ -548,17 +576,12 @@ User
         </div>
 
 
-
-
-
-
         <div class="toolbar">
 
 
             <h2>
                 Tickets
             </h2>
-
 
 
             <form th:action="@{/dashboard/create}"
@@ -576,12 +599,48 @@ User
 
         </div>
 
+        <form class="filters" method="get" th:action="@{/dashboard/}">
 
+            <select name="status">
+                <option value="">All Statuses</option>
+                <option value="OPEN">Open</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="RESOLVED">Resolved</option>
+                <option value="CLOSED">Closed</option>
+            </select>
 
+            <select name="priority">
+                <option value="">All Priorities</option>
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+                <option value="CRITICAL">Critical</option>
+            </select>
 
+            <select name="agent">
+                <option value="">All Agents</option>
+
+                <option th:each="agent : ${agents}"
+                        th:value="${agent.username}"
+                        th:text="${agent.firstName + ' ' + agent.lastName + (agent.username == #authentication.name ? ' (Me)' : '')}">
+                </option>
+            </select>
+
+            <input type="date" name="submittedDate">
+
+            <button type="submit">
+                Filter
+            </button>
+
+            <button class="clear"
+                    type="button"
+                    onclick="window.location='/dashboard'">
+                Clear
+            </button>
+
+        </form>
 
         <div class="ticket-list">
-
 
 
             <div class="empty"
@@ -592,12 +651,8 @@ User
             </div>
 
 
-
-
-
             <div class="ticket-row"
                  th:each="ticket:${tickets}">
-
 
 
                 <div>
@@ -613,9 +668,6 @@ User
                     </div>
 
                 </div>
-
-
-
 
 
                 <div>
@@ -635,26 +687,18 @@ ${ticket.ticketStatus=='OPEN'}?' open':
                 </div>
 
 
-
-
-
                 <div>
 
-<span class="small">
-Agent
-</span>
+    <span class="small">
+        Agent
+    </span>
 
                     <br>
 
-                    <span th:text="${ticket.agent ?: 'Unassigned'}">
-
-</span>
-
+                    <span th:text="${ticket.agent == null ? 'Unassigned' : ticket.agent + (ticket.agent == #authentication.name ? ' (Me)' : '')}">
+    </span>
 
                 </div>
-
-
-
 
 
                 <div>
@@ -678,10 +722,6 @@ ${ticket.importance=='HIGH' || ticket.importance=='CRITICAL'}?' priority-high':
                 </div>
 
 
-
-
-
-
                 <div>
 
 
@@ -702,23 +742,16 @@ ${ticket.importance=='HIGH' || ticket.importance=='CRITICAL'}?' priority-high':
                 </div>
 
 
-
             </div>
-
-
-
 
 
         </div>
 
 
-
     </div>
 
 
-
 </div>
-
 
 
 </body>

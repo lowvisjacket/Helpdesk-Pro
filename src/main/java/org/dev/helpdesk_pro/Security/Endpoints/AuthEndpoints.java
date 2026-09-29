@@ -1,14 +1,15 @@
-package org.dev.ticketing_software.Endpoints;
+package org.dev.ticketing_software.Security.Endpoints;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class GeneralEndpoint {
+@RequestMapping("/auth")
+public class AuthEndpoints {
 
-    @GetMapping("/success/")
-    public String getSuccessTicket() {
-        return "success";
+    @GetMapping("/login")
+    public String getLogin() {
+        return "login";
     }
 }

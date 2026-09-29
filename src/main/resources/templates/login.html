@@ -3,95 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Helpdesk Pro - Login</title>
 
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
         }
 
         body {
-            background: #f4f6f9;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            background: #f8fafc;
+            color: #1f2937;
         }
 
         .login-container {
-            background: white;
-            padding: 2rem;
-            width: 350px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            width: 360px;
+            background: #ffffff;
+            padding: 36px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .brand h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+            letter-spacing: -0.5px;
+        }
+
+        .brand p {
+            margin-top: 5px;
+            font-size: 13px;
+            color: #6b7280;
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 1.5rem;
-            color: #333;
+            margin-bottom: 24px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
         }
 
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 18px;
         }
 
         label {
             display: block;
-            margin-bottom: .4rem;
-            font-weight: bold;
-            color: #555;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
         }
 
         input {
             width: 100%;
-            padding: .75rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
             font-size: 15px;
+            background: #ffffff;
+            transition: border-color 0.2s;
         }
 
         input:focus {
             outline: none;
-            border-color: #1976d2;
+            border-color: #2563eb;
         }
 
         button {
             width: 100%;
-            padding: .8rem;
+            padding: 12px;
+            margin-top: 8px;
+
             border: none;
-            background: #1976d2;
+            border-radius: 8px;
+
+            background: #2563eb;
             color: white;
-            font-size: 16px;
-            border-radius: 5px;
+
+            font-size: 15px;
+            font-weight: 500;
+
             cursor: pointer;
-            margin-top: .5rem;
+            transition: background 0.2s;
         }
 
         button:hover {
-            background: #1565c0;
+            background: #1d4ed8;
         }
 
         .error {
-            color: #d32f2f;
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+
+            padding: 10px;
+            border-radius: 8px;
+
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 18px;
+
+            font-size: 14px;
         }
 
         .logout {
-            color: #2e7d32;
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+
+            padding: 10px;
+            border-radius: 8px;
+
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 18px;
+
+            font-size: 14px;
         }
+
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
     </style>
 </head>
+
 <body>
 
 <div class="login-container">
-    <h2>Login</h2>
+
+    <div class="brand">
+        <h1>Helpdesk Pro</h1>
+        <p>Support portal</p>
+    </div>
+
+    <h2>Sign in</h2>
 
     <div class="error" th:if="${param.error}">
         Invalid username or password.
@@ -109,7 +170,7 @@
                     type="text"
                     id="username"
                     name="username"
-                    placeholder="Enter username"
+                    placeholder="Enter your username"
                     required
                     autofocus>
         </div>
@@ -120,13 +181,20 @@
                     type="password"
                     id="password"
                     name="password"
-                    placeholder="Enter password"
+                    placeholder="Enter your password"
                     required>
         </div>
 
-        <button type="submit">Sign In</button>
+        <button type="submit">
+            Sign in
+        </button>
 
     </form>
+
+    <div class="footer">
+        © Helpdesk Pro
+    </div>
+
 </div>
 
 </body>

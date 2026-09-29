@@ -1,0 +1,8 @@
+.git
+.idea
+.mvn/wrapper/maven-wrapper.jar
+target
+gateway/target
+*.p12
+*.DS_Store
+application.properties

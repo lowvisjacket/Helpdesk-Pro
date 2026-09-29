@@ -425,7 +425,7 @@
 
 
         <a href="/dashboard/users"
-           sec:authorize="hasAnyAuthority('TECHNICIAN','ADMIN','SYSADMIN')">
+           sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')">
 
             Users
 
@@ -502,7 +502,7 @@
 
 
 
-                <form th:action="@{/users/create}"
+                <form th:action="@{/dashboard/users/create}"
                       method="get"
                       sec:authorize="hasAnyRole('ADMIN','SYSADMIN')">
 
@@ -617,7 +617,7 @@
 
                     <td>
 
-                        <form th:action="@{/users/{uuid}/delete(uuid=${user.uuid})}"
+                        <form th:action="@{/dashboard/users/{username}/delete(username=${user.username})}"
                               method="post"
                               sec:authorize="hasRole('SYSADMIN')">
 
