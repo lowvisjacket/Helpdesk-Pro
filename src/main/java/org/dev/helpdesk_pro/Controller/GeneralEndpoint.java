@@ -1,7 +1,7 @@
-package org.dev.ticketing_software.Controller;
+package org.dev.helpdesk_pro.Controller;
 
-import org.dev.ticketing_software.Logic.TicketService;
-import org.dev.ticketing_software.Logic.UserService;
+import org.dev.helpdesk_pro.Logic.TicketService;
+import org.dev.helpdesk_pro.Logic.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

@@ -1,9 +1,9 @@
-package org.dev.ticketing_software.Security.Config;
+package org.dev.helpdesk_pro.Security.Config;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.dev.ticketing_software.Data.Users.UserRepository;
+import org.dev.helpdesk_pro.Data.Users.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -17,7 +17,7 @@ import java.util.Set;
 public class AuthConfiguration implements AuthenticationSuccessHandler {
 
     @Autowired
-    UserRepository userRepository;
+    org.dev.helpdesk_pro.Data.Users.UserRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

@@ -1,8 +1,8 @@
-package org.dev.ticketing_software.TestData;
+package org.dev.helpdesk_pro.TestData;
 
-import org.dev.ticketing_software.Data.Users.User;
-import org.dev.ticketing_software.Data.Users.UserRepository;
-import org.dev.ticketing_software.Enum.UserRole;
+import org.dev.helpdesk_pro.Data.Users.User;
+import org.dev.helpdesk_pro.Data.Users.UserRepository;
+import org.dev.helpdesk_pro.Enum.UserRole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;

@@ -1,4 +1,4 @@
-package org.dev.ticketing_software.Data.Tickets;
+package org.dev.helpdesk_pro.Data.Tickets;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import org.dev.ticketing_software.Enum.TicketDepartment;
-import org.dev.ticketing_software.Enum.TicketStatus;
+import org.dev.helpdesk_pro.Enum.TicketDepartment;
+import org.dev.helpdesk_pro.Enum.TicketStatus;
 import java.util.List;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {

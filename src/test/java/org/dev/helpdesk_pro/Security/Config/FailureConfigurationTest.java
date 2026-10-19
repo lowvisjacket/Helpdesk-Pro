@@ -1,6 +1,6 @@
-package org.dev.ticketing_software.Security.Config;
+package org.dev.helpdesk_pro.Security.Config;
 
-import org.dev.ticketing_software.Logic.UserService;
+import org.dev.helpdesk_pro.Logic.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

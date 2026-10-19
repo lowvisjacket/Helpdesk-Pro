@@ -1,4 +1,4 @@
-package org.dev.ticketing_software.Enum;
+package org.dev.helpdesk_pro.Enum;
 
 public enum TicketDepartment {
     INFORMATION_TECHNOLOGY,

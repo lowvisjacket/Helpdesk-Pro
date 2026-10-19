@@ -1,10 +1,10 @@
-package org.dev.ticketing_software.Logic;
+package org.dev.helpdesk_pro.Logic;
 
-import org.dev.ticketing_software.Data.Users.User;
-import org.dev.ticketing_software.Data.Users.UserRepository;
-import org.dev.ticketing_software.Enum.UserRole;
-import org.dev.ticketing_software.Exceptions.UserException;
-import org.dev.ticketing_software.Exceptions.UserNotFoundException;
+import org.dev.helpdesk_pro.Data.Users.User;
+import org.dev.helpdesk_pro.Data.Users.UserRepository;
+import org.dev.helpdesk_pro.Enum.UserRole;
+import org.dev.helpdesk_pro.Exceptions.UserException;
+import org.dev.helpdesk_pro.Exceptions.UserNotFoundException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.stereotype.Service;
 

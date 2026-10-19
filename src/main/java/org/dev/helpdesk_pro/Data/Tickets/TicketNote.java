@@ -1,4 +1,4 @@
-package org.dev.ticketing_software.Data.Tickets;
+package org.dev.helpdesk_pro.Data.Tickets;
 
 import jakarta.persistence.*;
 import lombok.Getter;

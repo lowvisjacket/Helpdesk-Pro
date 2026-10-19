@@ -1,11 +1,11 @@
-package org.dev.ticketing_software.Data.Tickets;
+package org.dev.helpdesk_pro.Data.Tickets;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.dev.ticketing_software.Enum.TicketDepartment;
-import org.dev.ticketing_software.Enum.TicketImportance;
-import org.dev.ticketing_software.Enum.TicketStatus;
+import org.dev.helpdesk_pro.Enum.TicketDepartment;
+import org.dev.helpdesk_pro.Enum.TicketImportance;
+import org.dev.helpdesk_pro.Enum.TicketStatus;
 
 import java.io.Serializable;
 import java.time.*;

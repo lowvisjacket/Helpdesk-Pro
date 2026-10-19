@@ -1,15 +1,15 @@
-package org.dev.ticketing_software.Controller.Api;
+package org.dev.helpdesk_pro.Controller.Api;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.dev.ticketing_software.Data.Tickets.Ticket;
-import org.dev.ticketing_software.Data.Tickets.TicketRepository;
-import org.dev.ticketing_software.Enum.TicketDepartment;
-import org.dev.ticketing_software.Enum.TicketImportance;
-import org.dev.ticketing_software.Enum.TicketStatus;
-import org.dev.ticketing_software.Logic.TicketService;
-import org.dev.ticketing_software.Logic.UserService;
+import org.dev.helpdesk_pro.Data.Tickets.Ticket;
+import org.dev.helpdesk_pro.Data.Tickets.TicketRepository;
+import org.dev.helpdesk_pro.Enum.TicketDepartment;
+import org.dev.helpdesk_pro.Enum.TicketImportance;
+import org.dev.helpdesk_pro.Enum.TicketStatus;
+import org.dev.helpdesk_pro.Logic.TicketService;
+import org.dev.helpdesk_pro.Logic.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -153,7 +153,7 @@ public class TicketApiController {
             String date,
             String time
     ) {
-        private static NoteResponse from(org.dev.ticketing_software.Data.Tickets.TicketNote note) {
+        private static NoteResponse from(org.dev.helpdesk_pro.Data.Tickets.TicketNote note) {
             return new NoteResponse(
                     note.getId(),
                     note.getUsername(),

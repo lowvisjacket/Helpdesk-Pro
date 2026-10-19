@@ -1,17 +1,17 @@
-package org.dev.ticketing_software.Logic;
+package org.dev.helpdesk_pro.Logic;
 
-import org.dev.ticketing_software.Data.Tickets.Ticket;
-import org.dev.ticketing_software.Data.Tickets.TicketNote;
-import org.dev.ticketing_software.Data.Tickets.TicketNoteRepository;
-import org.dev.ticketing_software.Data.Tickets.TicketRepository;
-import org.dev.ticketing_software.Data.Users.User;
-import org.dev.ticketing_software.Data.Users.UserRepository;
-import org.dev.ticketing_software.Enum.TicketDepartment;
-import org.dev.ticketing_software.Enum.TicketImportance;
-import org.dev.ticketing_software.Enum.TicketStatus;
-import org.dev.ticketing_software.Enum.UserRole;
-import org.dev.ticketing_software.Exceptions.TicketException;
-import org.dev.ticketing_software.Exceptions.UserNotFoundException;
+import org.dev.helpdesk_pro.Data.Tickets.Ticket;
+import org.dev.helpdesk_pro.Data.Tickets.TicketNote;
+import org.dev.helpdesk_pro.Data.Tickets.TicketNoteRepository;
+import org.dev.helpdesk_pro.Data.Tickets.TicketRepository;
+import org.dev.helpdesk_pro.Data.Users.User;
+import org.dev.helpdesk_pro.Data.Users.UserRepository;
+import org.dev.helpdesk_pro.Enum.TicketDepartment;
+import org.dev.helpdesk_pro.Enum.TicketImportance;
+import org.dev.helpdesk_pro.Enum.TicketStatus;
+import org.dev.helpdesk_pro.Enum.UserRole;
+import org.dev.helpdesk_pro.Exceptions.TicketException;
+import org.dev.helpdesk_pro.Exceptions.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
