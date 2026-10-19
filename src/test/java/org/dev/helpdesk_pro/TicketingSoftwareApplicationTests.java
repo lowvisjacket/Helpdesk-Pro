@@ -19,10 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(properties = {
-        "spring.config.location=classpath:/",
-        "demo.seed.count=61"
-})
+@SpringBootTest
 @AutoConfigureMockMvc
 class TicketingSoftwareApplicationTests {
 
