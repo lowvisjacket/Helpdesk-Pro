@@ -1,5 +1,8 @@
 # Helpdesk Pro
 
+[![CI](https://github.com/lowvisjacket/Helpdesk-Pro/actions/workflows/ci.yml/badge.svg)](https://github.com/lowvisjacket/Helpdesk-Pro/actions/workflows/ci.yml) ![Java 21](https://img.shields.io/badge/Java-21-blue) ![License: MIT](https://img.shields.io/badge/License-MIT-green)
+
+
 A Spring-based help-desk application for submitting, assigning, and tracking support tickets. The repository includes a server-rendered web UI, a versioned JSON API, and a separate Spring Cloud Gateway service with Redis-backed rate limiting and circuit-breaker fallback.
 
 ## Architecture

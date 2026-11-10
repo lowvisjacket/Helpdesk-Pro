@@ -13,16 +13,16 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Helpdesk Pro</name>
     <description>Spring-based help desk for submitting, assigning, and tracking support tickets, with a REST API and Redis-backed gateway.</description>
-    <url>https://github.com/lowvisjacket/ticketing_software</url>
+    <url>https://github.com/lowvisjacket/Helpdesk-Pro</url>
     <scm>
-        <connection>scm:git:git://github.com/lowvisjacket/ticketing_software.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/lowvisjacket/ticketing_software.git</developerConnection>
-        <url>https://github.com/lowvisjacket/ticketing_software</url>
+        <connection>scm:git:git://github.com/lowvisjacket/Helpdesk-Pro.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/lowvisjacket/Helpdesk-Pro.git</developerConnection>
+        <url>https://github.com/lowvisjacket/Helpdesk-Pro</url>
         <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/lowvisjacket/ticketing_software/issues</url>
+        <url>https://github.com/lowvisjacket/Helpdesk-Pro/issues</url>
     </issueManagement>
     <developers>
         <developer>
