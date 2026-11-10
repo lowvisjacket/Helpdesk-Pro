@@ -1,10 +1,10 @@
-package org.dev.ticketing_software.Security.Config;
+package org.dev.helpdesk_pro.Security.Config;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.dev.ticketing_software.Logic.UserService;
-import org.dev.ticketing_software.Exceptions.UserNotFoundException;
+import org.dev.helpdesk_pro.Logic.UserService;
+import org.dev.helpdesk_pro.Exceptions.UserNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;

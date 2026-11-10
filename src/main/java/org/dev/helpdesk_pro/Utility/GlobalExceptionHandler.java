@@ -1,8 +1,8 @@
-package org.dev.ticketing_software.Utility;
+package org.dev.helpdesk_pro.Utility;
 
-import org.dev.ticketing_software.Exceptions.UserNotFoundException;
+import org.dev.helpdesk_pro.Exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.dev.ticketing_software.Exceptions.TicketException;
+import org.dev.helpdesk_pro.Exceptions.TicketException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

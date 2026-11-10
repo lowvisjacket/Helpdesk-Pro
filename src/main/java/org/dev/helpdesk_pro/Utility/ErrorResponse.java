@@ -1,4 +1,4 @@
-package org.dev.ticketing_software.Utility;
+package org.dev.helpdesk_pro.Utility;
 
 import lombok.Getter;
 

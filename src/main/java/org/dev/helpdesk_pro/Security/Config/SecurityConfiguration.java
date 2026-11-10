@@ -1,4 +1,4 @@
-package org.dev.ticketing_software.Security.Config;
+package org.dev.helpdesk_pro.Security.Config;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -26,8 +26,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             AuthenticationProvider authenticationProvider,
-            AuthConfiguration authConfiguration,
-            FailureConfiguration failureConfiguration
+            org.dev.helpdesk_pro.Security.Config.AuthConfiguration authConfiguration,
+            org.dev.helpdesk_pro.Security.Config.FailureConfiguration failureConfiguration
     ) throws Exception {
         RequestMatcher apiMatcher = request -> request.getServletPath().startsWith("/api/");
         AuthenticationEntryPoint apiAuthenticationEntryPoint = (request, response, exception) ->

@@ -1,9 +1,9 @@
-package org.dev.ticketing_software.Controller;
+package org.dev.helpdesk_pro.Controller;
 
-import org.dev.ticketing_software.Data.Tickets.TicketRepository;
-import org.dev.ticketing_software.Data.Tickets.Ticket;
-import org.dev.ticketing_software.Data.Users.User;
-import org.dev.ticketing_software.Data.Users.UserRepository;
+import org.dev.helpdesk_pro.Data.Tickets.TicketRepository;
+import org.dev.helpdesk_pro.Data.Tickets.Ticket;
+import org.dev.helpdesk_pro.Data.Users.User;
+import org.dev.helpdesk_pro.Data.Users.UserRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -122,7 +122,7 @@ public class DashboardEndpoint {
         }
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new org.dev.ticketing_software.Exceptions.UserNotFoundException("User does not exist.");
+            throw new org.dev.helpdesk_pro.Exceptions.UserNotFoundException("User does not exist.");
         }
         userRepository.delete(user);
         return "redirect:/dashboard/users";

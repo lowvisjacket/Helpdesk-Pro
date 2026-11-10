@@ -1,4 +1,4 @@
-package org.dev.ticketing_software.Data.Users;
+package org.dev.helpdesk_pro.Data.Users;
 
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.jpa.repository.Query;

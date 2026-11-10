@@ -1,11 +1,11 @@
-package org.dev.ticketing_software.Controller;
+package org.dev.helpdesk_pro.Controller;
 
-import org.dev.ticketing_software.Data.Tickets.Ticket;
-import org.dev.ticketing_software.Enum.TicketStatus;
-import org.dev.ticketing_software.Exceptions.TicketException;
-import org.dev.ticketing_software.Exceptions.UserNotFoundException;
-import org.dev.ticketing_software.Logic.TicketService;
-import org.dev.ticketing_software.Logic.UserService;
+import org.dev.helpdesk_pro.Data.Tickets.Ticket;
+import org.dev.helpdesk_pro.Enum.TicketStatus;
+import org.dev.helpdesk_pro.Exceptions.TicketException;
+import org.dev.helpdesk_pro.Exceptions.UserNotFoundException;
+import org.dev.helpdesk_pro.Logic.TicketService;
+import org.dev.helpdesk_pro.Logic.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

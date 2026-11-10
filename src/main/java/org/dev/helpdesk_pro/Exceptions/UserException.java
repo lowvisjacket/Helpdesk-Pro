@@ -1,4 +1,4 @@
-package org.dev.ticketing_software.Exceptions;
+package org.dev.helpdesk_pro.Exceptions;
 
 public class UserException extends RuntimeException {
     public UserException(String message) {

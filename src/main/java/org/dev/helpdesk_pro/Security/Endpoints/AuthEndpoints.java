@@ -1,4 +1,4 @@
-package org.dev.ticketing_software.Security.Endpoints;
+package org.dev.helpdesk_pro.Security.Endpoints;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

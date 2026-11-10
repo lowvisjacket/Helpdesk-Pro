@@ -1,7 +1,7 @@
-package org.dev.ticketing_software;
+package org.dev.helpdesk_pro;
 
-import org.dev.ticketing_software.Data.Users.User;
-import org.dev.ticketing_software.Data.Users.UserRepository;
+import org.dev.helpdesk_pro.Data.Users.User;
+import org.dev.helpdesk_pro.Data.Users.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,10 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(properties = {
-        "spring.config.location=classpath:/",
-        "demo.seed.count=61"
-})
+@SpringBootTest
 @AutoConfigureMockMvc
 class TicketingSoftwareApplicationTests {
 

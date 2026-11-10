@@ -1,4 +1,4 @@
-package org.dev.ticketing_software.Controller;
+package org.dev.helpdesk_pro.Controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
