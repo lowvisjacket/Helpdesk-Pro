@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en" data-role="tech">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>helpdesk-pro · redesign mockup v2</title>
+<style>
+/* ---------- Design tokens (helpdesk-pro) ---------- */
+:root{
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --fs-xs:.6875rem; --fs-sm:.75rem; --fs-md:.8125rem; --fs-lg:.9375rem; --fs-xl:1.375rem;
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-5:1.5rem;
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-pill:999px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+
+  --bg:#f4f4f2; --surface:#ffffff; --sunken:#f0f0ee; --hover:rgba(0,0,0,.045); --press:rgba(0,0,0,.08);
+  --line:rgba(0,0,0,.09); --line-strong:rgba(0,0,0,.16);
+  --text:#1b1c1e; --text-2:#5d6065; --text-3:#8b8e94;
+  --tint:#0f7a6c; --tint-soft:rgba(15,122,108,.12); --on-tint:#fff;
+  --side:rgba(236,236,233,.72); --bar:rgba(255,255,255,.72); --pop:rgba(255,255,255,.82);
+  --ok:#1e7a45; --ok-bg:rgba(30,122,69,.12);
+  --info:#2c5fa8; --info-bg:rgba(44,95,168,.12);
+  --warn:#96630a; --warn-bg:rgba(200,135,20,.16);
+  --danger:#b3362a; --danger-bg:rgba(179,54,42,.12);
+  --mute:#62656b; --mute-bg:rgba(0,0,0,.06);
+  --shadow-1:0 0 0 1px var(--line),0 1px 2px rgba(0,0,0,.04);
+  --shadow-pop:0 0 0 1px var(--line),0 12px 32px rgba(0,0,0,.16),0 2px 6px rgba(0,0,0,.08);
+}
+html.dark{
+  --bg:#131415; --surface:#1c1d1f; --sunken:#17181a; --hover:rgba(255,255,255,.06); --press:rgba(255,255,255,.1);
+  --line:rgba(255,255,255,.1); --line-strong:rgba(255,255,255,.18);
+  --text:#ececee; --text-2:#a6a9ae; --text-3:#787b81;
+  --tint:#4cc2ae; --tint-soft:rgba(76,194,174,.16); --on-tint:#06201c;
+  --side:rgba(26,27,29,.72); --bar:rgba(28,29,31,.72); --pop:rgba(40,41,44,.82);
+  --ok:#6fd397; --ok-bg:rgba(111,211,151,.14);
+  --info:#8db8f5; --info-bg:rgba(141,184,245,.14);
+  --warn:#edbf62; --warn-bg:rgba(237,191,98,.14);
+  --danger:#f39386; --danger-bg:rgba(243,147,134,.14);
+  --mute:#a6a9ae; --mute-bg:rgba(255,255,255,.08);
+  --shadow-pop:0 0 0 1px var(--line),0 12px 32px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font:var(--fs-md)/1.45 var(--font);color:var(--text);background:var(--bg);
+  transition:background-color .25s ease,color .25s ease;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+svg.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+:focus-visible{outline:2px solid var(--tint);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* ---------- Role visibility (MOCKUP ONLY: the real build omits this markup server-side) ---------- */
+html[data-role=user] .staff{display:none!important}
+html:not([data-role=user]) .enduser{display:none!important}
+html[data-role=user] .admin,html[data-role=tech] .admin{display:none!important}
+html:not([data-role=sys]) .sys{display:none!important}
+
+/* ---------- Shell ---------- */
+.app{display:grid;grid-template-columns:212px 1fr;height:100%}
+.side{background:var(--side);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);
+  border-right:1px solid var(--line);display:flex;flex-direction:column;padding:var(--sp-3) var(--sp-2);gap:1px;overflow:auto}
+.brand{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-1) var(--sp-2) var(--sp-4);font-weight:650;font-size:var(--fs-lg);letter-spacing:-.01em}
+.logo{width:26px;height:26px;border-radius:var(--r-md);background:var(--tint);color:var(--on-tint);display:grid;place-items:center;font-weight:750;font-size:.75rem}
+.side a{display:flex;align-items:center;gap:var(--sp-2);padding:.375rem var(--sp-2);border-radius:var(--r-md);color:var(--text-2);text-decoration:none;transition:background-color .12s ease}
+.side a:hover{background:var(--hover)}
+.side a:active{background:var(--press)}
+.side a.on{background:var(--tint-soft);color:var(--tint);font-weight:600}
+.side .n{margin-left:auto;font-size:var(--fs-xs);color:var(--text-3);font-variant-numeric:tabular-nums}
+.side .sect{font-size:var(--fs-xs);font-weight:600;color:var(--text-3);padding:var(--sp-4) var(--sp-2) var(--sp-1)}
+.grow{flex:1}
+
+.main{display:flex;flex-direction:column;min-width:0;min-height:0;position:relative}
+.bar{position:sticky;top:0;z-index:5;height:48px;flex:none;display:flex;align-items:center;gap:var(--sp-2);padding:0 var(--sp-4);
+  background:var(--bar);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--line)}
+.search{flex:1;max-width:380px;display:flex;align-items:center;gap:var(--sp-2);background:var(--mute-bg);border-radius:var(--r-md);padding:.3rem var(--sp-2);color:var(--text-3)}
+.search input{border:0;outline:0;background:none;flex:1;min-width:0}
+.iconbtn{border:0;background:none;border-radius:var(--r-md);padding:.4rem;color:var(--text-2);display:grid;transition:background-color .12s ease,transform .1s ease-out}
+.iconbtn:hover{background:var(--hover)} .iconbtn:active{background:var(--press);transform:scale(.94)}
+.avatar{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-xs);font-weight:650;background:var(--mute-bg);color:var(--text-2);flex:none;border:0}
+.btn{display:inline-flex;align-items:center;gap:.375rem;border:0;background:var(--surface);box-shadow:var(--shadow-1);border-radius:var(--r-md);padding:.34rem .75rem;font-weight:550;
+  transition:transform .1s ease-out,background-color .12s ease}
+.btn:hover{background:var(--sunken)} .btn:active{transform:scale(.97)}
+.btn.tint{background:var(--tint);color:var(--on-tint);box-shadow:none}
+.btn.tint:hover{filter:brightness(1.06)}
+.btn.plain{background:none;box-shadow:none;color:var(--tint)}
+
+/* Segmented control + switch */
+.seg{display:inline-flex;background:var(--mute-bg);border-radius:var(--r-md);padding:2px;gap:2px}
+.seg button{border:0;background:none;border-radius:6px;padding:.22rem .7rem;color:var(--text-2);font-size:var(--fs-sm);font-weight:550;transition:background-color .15s ease,transform .1s ease-out}
+.seg button:active{transform:scale(.96)}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--text);box-shadow:0 0 0 .5px var(--line),0 1px 2px rgba(0,0,0,.12)}
+html.dark .seg button[aria-pressed=true]{background:rgba(255,255,255,.16)}
+.switch{appearance:none;width:34px;height:20px;border-radius:var(--r-pill);background:var(--line-strong);position:relative;cursor:pointer;transition:background-color .2s ease;flex:none;margin:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:transform .25s var(--ease)}
+.switch:checked{background:var(--tint)} .switch:checked::after{transform:translateX(14px)}
+
+/* Account menu: grows from its trigger */
+.menu{position:absolute;top:44px;right:var(--sp-4);z-index:10;width:264px;padding:var(--sp-2);border-radius:var(--r-lg);
+  background:var(--pop);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);box-shadow:var(--shadow-pop);
+  transform-origin:calc(100% - 12px) 0;transform:scale(.92);opacity:0;visibility:hidden;
+  transition:transform .22s var(--ease),opacity .16s ease,visibility 0s .22s}
+.menu.open{transform:none;opacity:1;visibility:visible;transition:transform .28s var(--ease),opacity .16s ease}
+.menu .me{display:flex;gap:var(--sp-2);align-items:center;padding:var(--sp-2)}
+.menu .me small{display:block;color:var(--text-3);font-size:var(--fs-sm)}
+.menu hr{border:0;border-top:1px solid var(--line);margin:var(--sp-1) 0}
+.menu .row{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);padding:.375rem var(--sp-2)}
+.menu .item{display:flex;width:100%;border:0;background:none;text-align:left;padding:.375rem var(--sp-2);border-radius:var(--r-sm)}
+.menu .item:hover{background:var(--hover)}
+
+.view{flex:1;min-height:0;overflow:auto;padding:var(--sp-5) var(--sp-5) 5rem}
+.head{display:flex;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-4);flex-wrap:wrap}
+h1{font-size:var(--fs-xl);margin:0;font-weight:680;letter-spacing:-.02em;line-height:1.15}
+.sub{color:var(--text-3)}
+.card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--shadow-1);overflow:hidden}
+
+/* ---------- Ticket list ---------- */
+.tools{display:flex;gap:var(--sp-2);align-items:center;flex-wrap:wrap;margin-bottom:var(--sp-3)}
+.chip{display:inline-flex;align-items:center;gap:.3rem;border:0;background:var(--mute-bg);border-radius:var(--r-pill);padding:.2rem .7rem;font-size:var(--fs-sm);color:var(--text-2);transition:transform .1s ease-out}
+.chip:active{transform:scale(.96)} .chip b{color:var(--text);font-weight:600}
+table{width:100%;border-collapse:collapse}
+th{font-size:var(--fs-xs);color:var(--text-3);font-weight:600;text-align:left;padding:.5rem .75rem;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:.55rem .75rem;border-bottom:1px solid var(--line);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer;transition:background-color .1s ease}
+tbody tr:hover{background:var(--hover)} tbody tr:active{background:var(--press)}
+td.subj{white-space:normal;min-width:240px}
+.subj .t{font-weight:500} tr.unread .subj .t{font-weight:680}
+.subj .m{color:var(--text-3);font-size:var(--fs-sm)}
+.new{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--tint);margin-right:.4rem;vertical-align:middle}
+.id{font-family:var(--mono);font-size:var(--fs-sm);color:var(--text-3)}
+.who{display:flex;align-items:center;gap:.4rem}
+.badge{display:inline-block;border-radius:var(--r-pill);padding:.05rem .55rem;font-size:var(--fs-sm);font-weight:600}
+.s-open{background:var(--info-bg);color:var(--info)} .s-prog{background:var(--warn-bg);color:var(--warn)}
+.s-ok{background:var(--ok-bg);color:var(--ok)} .s-mute{background:var(--mute-bg);color:var(--mute)}
+.s-risk{background:var(--danger-bg);color:var(--danger)}
+.prio{display:inline-flex;align-items:flex-end;gap:.4rem;color:var(--text-2)}
+.prio i{display:inline-flex;gap:2px;align-items:flex-end}
+.prio i b{width:3px;border-radius:1px;background:var(--line-strong)}
+.prio i b:nth-child(1){height:5px}.prio i b:nth-child(2){height:8px}.prio i b:nth-child(3){height:11px}
+.p1 i b:nth-child(1),.p2 i b:nth-child(-n+2),.p3 i b{background:var(--text-2)}
+.p4 i b{background:var(--danger)} .p4{color:var(--danger)}
+.foot{display:flex;align-items:center;gap:var(--sp-2);padding:.5rem .75rem;color:var(--text-3);font-size:var(--fs-sm);border-top:1px solid var(--line)}
+
+/* ---------- Ticket detail ---------- */
+.detail{display:grid;grid-template-columns:minmax(0,1fr) 288px;gap:var(--sp-4);align-items:start}
+.back{border:0;background:none;color:var(--tint);padding:0;margin-bottom:var(--sp-2)}
+.msg{padding:var(--sp-3) var(--sp-4);display:grid;grid-template-columns:26px 1fr;gap:var(--sp-3)}
+.msg+.msg,.event+.msg,.msg+.event{border-top:1px solid var(--line)}
+.msg .meta b{font-weight:600} .msg .meta span{color:var(--text-3);font-size:var(--fs-sm);margin-left:.4rem}
+.msg p{margin:.2rem 0 0;max-width:64ch}
+.msg.note p{background:var(--warn-bg);border-radius:var(--r-md);padding:.5rem .7rem;margin-top:.35rem}
+.lock{font-size:var(--fs-xs);font-weight:600;color:var(--warn);background:var(--warn-bg);border-radius:var(--r-sm);padding:.05rem .4rem;margin-left:.4rem}
+.event{padding:.4rem var(--sp-4);color:var(--text-3);font-size:var(--fs-sm);text-align:center}
+.reply{padding:var(--sp-3) var(--sp-4);border-top:1px solid var(--line)}
+.reply textarea{width:100%;min-height:72px;resize:vertical;border:0;border-radius:var(--r-md);background:var(--sunken);padding:var(--sp-2) var(--sp-3);margin-top:var(--sp-2)}
+.reply .row{display:flex;gap:var(--sp-2);margin-top:var(--sp-2)}
+.stack{display:grid;gap:var(--sp-4)}
+.group h3{margin:0;padding:var(--sp-3) var(--sp-4) 0;font-size:var(--fs-sm);font-weight:600;color:var(--text-3)}
+.kv{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);padding:.5rem var(--sp-4);min-height:38px}
+.kv+.kv{border-top:1px solid var(--line)}
+.kv>span:first-child{color:var(--text-2)}
+.kv select{border:0;background:var(--mute-bg);border-radius:var(--r-sm);padding:.2rem .4rem;max-width:150px}
+.hint{color:var(--text-3);font-size:var(--fs-sm);padding:var(--sp-2) var(--sp-4) var(--sp-3)}
+
+/* ---------- Settings ---------- */
+.settings{max-width:620px;display:grid;gap:var(--sp-5)}
+.settings h2{font-size:var(--fs-sm);font-weight:600;color:var(--text-3);margin:0 0 var(--sp-2) var(--sp-1)}
+.kv small{display:block;color:var(--text-3);font-size:var(--fs-sm)}
+
+/* ---------- Mockup-only role preview ---------- */
+.preview{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:var(--sp-2);padding:.35rem .5rem .35rem .8rem;border-radius:var(--r-pill);
+  background:var(--pop);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:var(--shadow-pop);font-size:var(--fs-sm);color:var(--text-2);white-space:nowrap}
+
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}.side{display:none}.detail{grid-template-columns:1fr}.view{padding:var(--sp-4) var(--sp-4) 5rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}.menu{transform:none}}
+@media (prefers-reduced-transparency:reduce){.side,.bar,.menu,.preview{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--surface)}}
+@media (prefers-contrast:more){:root{--line:rgba(0,0,0,.35)}html.dark{--line:rgba(255,255,255,.4)}}
+</style>
+</head>
+<body>
+<!-- Icons here are simple original placeholders; the real build will use Lucide (ISC licence). -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M9 6v12"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.7-3.600 3.200-5.500 7-5.500s6.300 1.900 7 5.500"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16M8 16v-5M12 16V7M16 16v-3"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8.500" stroke-dasharray="3 3.670"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.500"/><path d="M16 16l4.500 4.500"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17v-6a6 6 0 0112 0v6l1.500 2h-15zM10 21h4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+</defs></svg>
+
+<div class="app">
+  <nav class="side" aria-label="Primary">
+    <div class="brand"><div class="logo">hp</div>helpdesk-pro</div>
+    <a href="#" class="staff"><svg class="i"><use href="#i-home"/></svg>Dashboard</a>
+    <a href="#" class="on" data-go="list"><svg class="i"><use href="#i-ticket"/></svg><span class="staff">Tickets</span><span class="enduser">My tickets</span></a>
+    <a href="#" class="admin"><svg class="i"><use href="#i-users"/></svg>Users</a>
+    <a href="#" class="admin"><svg class="i"><use href="#i-chart"/></svg>Reports</a>
+    <div class="sect staff">Views</div>
+    <a href="#" class="staff">All open<span class="n">19</span></a>
+    <a href="#" class="staff">Assigned to me<span class="n">7</span></a>
+    <a href="#" class="staff">Unassigned<span class="n">5</span></a>
+    <a href="#" class="staff">Due soon<span class="n">3</span></a>
+    <a href="#" class="staff" style="color:var(--text-3)"><svg class="i"><use href="#i-plus"/></svg>New view</a>
+    <div class="grow"></div>
+    <a href="#" data-go="settings"><svg class="i"><use href="#i-gear"/></svg>Settings</a>
+  </nav>
+
+  <div class="main">
+    <header class="bar">
+      <label class="search"><svg class="i"><use href="#i-search"/></svg><input placeholder="Search" aria-label="Search"></label>
+      <div class="grow"></div>
+      <button class="btn tint"><svg class="i"><use href="#i-plus"/></svg>New ticket</button>
+      <button class="iconbtn" aria-label="Notifications"><svg class="i"><use href="#i-bell"/></svg></button>
+      <button class="avatar" id="acct" aria-haspopup="true" aria-expanded="false" aria-label="Account menu">SA</button>
+    </header>
+
+    <div class="menu" id="menu" role="menu">
+      <div class="me"><span class="avatar">SA</span><div><b>Sam Avery</b><small id="roleLabel">Technician</small></div></div>
+      <hr>
+      <div class="row"><span>Appearance</span>
+        <div class="seg" role="group" aria-label="Appearance">
+          <button data-theme="light" aria-pressed="false">Light</button><button data-theme="dark" aria-pressed="false">Dark</button><button data-theme="system" aria-pressed="true">Auto</button>
+        </div></div>
+      <label class="row"><span>Notification sound</span><input type="checkbox" class="switch" checked></label>
+      <hr>
+      <button class="item" data-go="settings">Settings</button>
+      <button class="item">Sign out</button>
+    </div>
+
+    <!-- ===== Ticket list ===== -->
+    <section class="view" id="list">
+      <div class="head">
+        <h1><span class="staff">All open</span><span class="enduser">My tickets</span></h1>
+        <span class="sub staff">19 tickets</span><span class="sub enduser">2 tickets</span>
+        <div class="grow"></div>
+        <button class="btn staff">Edit view</button>
+      </div>
+      <div class="tools">
+        <button class="chip">Status <b>Open, In progress</b></button>
+        <button class="chip">Priority <b>Any</b></button>
+        <button class="chip staff">Assignee <b>Anyone</b></button>
+        <button class="chip">Sort <b>Last updated</b></button>
+        <button class="chip staff"><svg class="i"><use href="#i-plus"/></svg>Filter</button>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>ID</th><th>Subject</th><th class="staff">Requester</th><th>Status</th><th>Priority</th><th class="staff">Assignee</th><th class="staff">Due</th><th>Updated</th></tr></thead>
+          <tbody>
+            <tr class="unread" data-go="detail"><td class="id">1042</td><td class="subj"><div class="t"><span class="new" title="New activity"></span>VPN disconnects every few minutes</div><div class="m">Network</div></td><td class="staff"><div class="who"><span class="avatar">MK</span>Mira Kovac</div></td><td><span class="badge s-open">Open</span></td><td><span class="prio p4"><i><b></b><b></b><b></b></i>Urgent</span></td><td class="staff">Sam Avery</td><td class="staff"><span class="badge s-risk">40 min</span></td><td>2 min ago</td></tr>
+            <tr class="unread staff" data-go="detail"><td class="id">1041</td><td class="subj"><div class="t"><span class="new"></span>Laptop won't boot after update</div><div class="m">Hardware</div></td><td><div class="who"><span class="avatar">JD</span>Jon Diaz</div></td><td><span class="badge s-open">Open</span></td><td><span class="prio p3"><i><b></b><b></b><b></b></i>High</span></td><td style="color:var(--text-3)">Unassigned</td><td><span class="badge s-prog">3 h</span></td><td>5 min ago</td></tr>
+            <tr class="staff" data-go="detail"><td class="id">1038</td><td class="subj"><div class="t">Request access to finance shared drive</div><div class="m">Access</div></td><td><div class="who"><span class="avatar">LP</span>Lea Park</div></td><td><span class="badge s-prog">In progress</span></td><td><span class="prio p2"><i><b></b><b></b><b></b></i>Medium</span></td><td>Ana Ruiz</td><td><span class="badge s-ok">On track</span></td><td>1 h ago</td></tr>
+            <tr data-go="detail"><td class="id">1035</td><td class="subj"><div class="t">Second monitor not detected</div><div class="m">Hardware</div></td><td class="staff"><div class="who"><span class="avatar">MK</span>Mira Kovac</div></td><td><span class="badge s-prog">In progress</span></td><td><span class="prio p1"><i><b></b><b></b><b></b></i>Low</span></td><td class="staff">Sam Avery</td><td class="staff"><span class="badge s-ok">On track</span></td><td>3 h ago</td></tr>
+            <tr class="staff" data-go="detail"><td class="id">1029</td><td class="subj"><div class="t">Password reset for HR portal</div><div class="m">Accounts</div></td><td><div class="who"><span class="avatar">RN</span>Rui Nakamura</div></td><td><span class="badge s-ok">Resolved</span></td><td><span class="prio p2"><i><b></b><b></b><b></b></i>Medium</span></td><td>Ana Ruiz</td><td><span class="badge s-mute">Met</span></td><td>Yesterday</td></tr>
+          </tbody>
+        </table>
+        <div class="foot"><span class="staff">1–5 of 19</span><span class="enduser">2 of 2</span><span class="grow"></span><button class="btn staff">Previous</button><button class="btn staff">Next</button></div>
+      </div>
+    </section>
+
+    <!-- ===== Ticket detail ===== -->
+    <section class="view" id="detail" hidden>
+      <button class="back" data-go="list">‹ <span class="staff">All open</span><span class="enduser">My tickets</span></button>
+      <div class="head">
+        <h1>VPN disconnects every few minutes</h1><span class="id">1042</span>
+        <div class="grow"></div>
+        <button class="btn staff">Assign to me</button><button class="btn tint staff">Resolve</button>
+        <button class="btn enduser">Mark as solved</button>
+      </div>
+      <div class="detail">
+        <div class="card">
+          <div class="msg"><span class="avatar">MK</span><div><div class="meta"><b>Mira Kovac</b><span>09:12</span></div><p>Since this morning the VPN drops every 3–5 minutes on the office Wi-Fi. Wired works fine. I have a client call at 11.</p></div></div>
+          <div class="event staff">Sam Avery changed priority from High to Urgent · 09:20</div>
+          <div class="msg"><span class="avatar">SA</span><div><div class="meta"><b>Sam Avery</b><span>Support · 09:24</span></div><p>Thanks Mira. Which access point are you closest to, and are you on the 2.4 or 5 GHz network?</p></div></div>
+          <div class="msg note staff"><span class="avatar">AR</span><div><div class="meta"><b>Ana Ruiz</b><span class="lock">Internal note</span><span>09:31</span></div><p>AP-3F-02 had a firmware push last night. Likely related. Rolling back.</p></div></div>
+          <div class="msg"><span class="avatar">MK</span><div><div class="meta"><b>Mira Kovac</b><span>2 min ago</span></div><p>Third floor, near the kitchen. 5 GHz I think.</p></div></div>
+          <div class="reply">
+            <div class="seg staff" role="group" aria-label="Message type"><button aria-pressed="true">Reply</button><button aria-pressed="false">Internal note</button></div>
+            <textarea placeholder="Write a reply" aria-label="Reply"></textarea>
+            <div class="row"><button class="btn tint">Send</button><button class="btn staff">Send and resolve</button></div>
+          </div>
+        </div>
+        <aside class="stack">
+          <!-- Staff: editable properties -->
+          <div class="card group staff">
+            <div class="kv"><span>Status</span><select><option>Open</option><option>In progress</option><option>Resolved</option><option>Closed</option></select></div>
+            <div class="kv"><span>Priority</span><select><option>Urgent</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+            <div class="kv"><span>Assignee</span><select><option>Sam Avery</option><option>Ana Ruiz</option><option>Unassigned</option></select></div>
+            <div class="kv"><span>Category</span><select><option>Network</option><option>Hardware</option><option>Access</option></select></div>
+            <div class="kv"><span>Resolution due</span><span class="badge s-risk">40 min</span></div>
+          </div>
+          <!-- End user: read-only summary, no assignee controls, no SLA, no internal notes -->
+          <div class="card group enduser">
+            <div class="kv"><span>Status</span><span class="badge s-open">Open</span></div>
+            <div class="kv"><span>Priority</span><span>Urgent</span></div>
+            <div class="kv"><span>Handled by</span><span>Support team</span></div>
+            <div class="kv"><span>Opened</span><span>Today, 09:12</span></div>
+          </div>
+          <div class="card group staff">
+            <h3>Requester</h3>
+            <div class="kv"><span class="who"><span class="avatar">MK</span>Mira Kovac</span><span class="sub">Sales</span></div>
+            <div class="kv"><span>Email</span><span>mira.kovac@example.com</span></div>
+            <div class="kv"><span>Open tickets</span><span>2</span></div>
+            <div class="kv admin"><span>Account role</span><span>User</span></div>
+            <div class="kv admin"><span>Last sign-in</span><span>Today, 08:47</span></div>
+            <div class="kv admin"><span></span><button class="btn plain">Manage account</button></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== Settings ===== -->
+    <section class="view" id="settings" hidden>
+      <div class="head"><h1>Settings</h1></div>
+      <div class="settings">
+        <div><h2>Appearance</h2><div class="card">
+          <div class="kv"><span>Theme<small>Auto follows your device.</small></span>
+            <div class="seg" role="group" aria-label="Theme"><button data-theme="light" aria-pressed="false">Light</button><button data-theme="dark" aria-pressed="false">Dark</button><button data-theme="system" aria-pressed="true">Auto</button></div></div>
+        </div></div>
+        <div><h2>Notifications</h2><div class="card">
+          <label class="kv"><span>Live updates<small>Refresh lists when tickets change.</small></span><input type="checkbox" class="switch" checked></label>
+          <label class="kv"><span>Notification sound<small>A short tone for new tickets and replies.</small></span><input type="checkbox" class="switch" checked></label>
+        </div></div>
+        <div class="staff"><h2>Ticket list</h2><div class="card">
+          <div class="kv"><span>Default view</span><select><option>All open</option><option>Assigned to me</option><option>Unassigned</option><option>Due soon</option></select></div>
+          <div class="kv"><span>Views<small>Rename, reorder or delete your saved views.</small></span><button class="btn plain">Manage</button></div>
+        </div></div>
+        <div class="admin"><h2>Administration</h2><div class="card">
+          <div class="kv"><span>Users and roles<small>Create accounts, change roles, disable access.</small></span><button class="btn plain">Open</button></div>
+          <div class="kv sys"><span>System<small>Sysadmin only: admin accounts and system configuration.</small></span><button class="btn plain">Open</button></div>
+        </div></div>
+        <div><h2>Account</h2><div class="card">
+          <div class="kv"><span>Password</span><button class="btn plain">Change</button></div>
+        </div></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Mockup only: lets you preview what each role sees. Not part of the product. -->
+<div class="preview">Mockup preview as
+  <div class="seg" role="group" aria-label="Preview role">
+    <button data-role="user" aria-pressed="false">User</button><button data-role="tech" aria-pressed="true">Technician</button><button data-role="admin" aria-pressed="false">Admin</button><button data-role="sys" aria-pressed="false">Sysadmin</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement, mq=matchMedia('(prefers-color-scheme: dark)'), mode='system';
+  var $$=function(s){return document.querySelectorAll(s);};
+  // Theme: the real build stores this per user and sets the class on <html> server-side.
+  function theme(){
+    root.classList.toggle('dark', mode==='dark'||(mode==='system'&&mq.matches));
+    $$('[data-theme]').forEach(function(b){b.setAttribute('aria-pressed', b.dataset.theme===mode);});
+  }
+  mq.addEventListener('change',theme); theme();
+  // Account menu
+  var menu=document.getElementById('menu'), acct=document.getElementById('acct');
+  function setMenu(open){menu.classList.toggle('open',open);acct.setAttribute('aria-expanded',open);}
+  var names={user:['MK','Mira Kovac','User'],tech:['SA','Sam Avery','Technician'],admin:['AR','Ana Ruiz','Admin'],sys:['RT','Root Admin','Sysadmin']};
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('[data-theme],[data-go],[data-role],#acct');
+    if(!t){ if(!e.target.closest('#menu')) setMenu(false); return; }
+    if(t.id==='acct'){ setMenu(!menu.classList.contains('open')); return; }
+    if(t.dataset.theme){ mode=t.dataset.theme; theme(); return; }
+    if(t.dataset.role){
+      root.dataset.role=t.dataset.role; var n=names[t.dataset.role];
+      $$('[data-role]').forEach(function(b){ if(b!==root) b.setAttribute('aria-pressed', b===t); });
+      acct.textContent=n[0]; menu.querySelector('.me .avatar').textContent=n[0];
+      menu.querySelector('.me b').textContent=n[1]; document.getElementById('roleLabel').textContent=n[2];
+      return;
+    }
+    e.preventDefault(); setMenu(false);
+    ['list','detail','settings'].forEach(function(id){document.getElementById(id).hidden=id!==t.dataset.go;});
+  });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') setMenu(false); });
+})();
+</script>
+</body>
+</html>
