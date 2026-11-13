@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{layout :: page('Settings', 'settings', ~{::main})}">
+<body>
+<main class="view">
+  <div class="narrow stack" style="gap:1.5rem">
+    <div class="head" style="margin:0"><h1>Settings</h1></div>
+
+    <section><h2>Appearance</h2>
+      <div class="card">
+        <div class="kv"><span>Theme<small>Auto follows your device.</small></span>
+          <div class="seg" role="group" aria-label="Theme">
+            <button type="button" data-theme="light">Light</button><button type="button" data-theme="dark">Dark</button><button type="button" data-theme="system">Auto</button>
+          </div></div>
+      </div>
+    </section>
+
+    <section><h2>Notifications</h2>
+      <div class="card">
+        <label class="kv"><span>Notification sound<small>A short tone when a ticket is created or updated.</small></span><input type="checkbox" class="switch" data-sound></label>
+      </div>
+    </section>
+
+    <section id="views" sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')"><h2>Ticket views</h2>
+      <div class="card">
+        <div class="kv" th:each="v, it : ${navViews}">
+          <form class="grow" method="post" th:action="@{/views/{id}/rename(id=${v.id})}">
+            <input class="mini" name="name" th:value="${v.name}" maxlength="60" required aria-label="View name">
+            <button class="btn plain" type="submit">Rename</button>
+          </form>
+          <span class="who">
+            <form method="post" th:action="@{/views/{id}/move(id=${v.id})}"><input type="hidden" name="dir" value="up"><button class="iconbtn" type="submit" aria-label="Move up" title="Move up" th:disabled="${it.first}">↑</button></form>
+            <form method="post" th:action="@{/views/{id}/move(id=${v.id})}"><input type="hidden" name="dir" value="down"><button class="iconbtn" type="submit" aria-label="Move down" title="Move down" th:disabled="${it.last}">↓</button></form>
+            <form method="post" th:action="@{/views/{id}/default(id=${v.id})}"><button class="btn plain" type="submit" th:text="${v.defaultView ? 'Default ✓' : 'Make default'}">Make default</button></form>
+            <form method="post" th:action="@{/views/{id}/delete(id=${v.id})}" th:data-confirm="'Delete the view “' + ${v.name} + '”?'"><button class="btn plain danger" type="submit">Delete</button></form>
+          </span>
+        </div>
+        <div class="empty" th:if="${navViews == null or navViews.isEmpty()}">No saved views yet. Filter the <a th:href="@{/dashboard/}">ticket list</a>, then choose Save view.</div>
+      </div>
+    </section>
+
+    <section th:if="${me != null}"><h2>Account</h2>
+      <div class="card">
+        <div class="kv"><span>Name</span><span class="val" th:text="${me.fullName}">Name</span></div>
+        <div class="kv"><span>Username</span><span class="val mono" th:text="${me.username}">username</span></div>
+        <div class="kv"><span>Role</span><span class="val" th:text="${@fmt.label(me.role)}">Role</span></div>
+        <div class="kv"><span>Department</span><span class="val" th:text="${@fmt.label(me.department)}">Dept</span></div>
+      </div>
+      <p class="sub" style="margin:.5rem .25rem 0">Account details are managed by your administrator.</p>
+    </section>
+  </div>
+</main>
+</body>
+</html>

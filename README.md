@@ -5,6 +5,18 @@
 
 A Spring-based help-desk application for submitting, assigning, and tracking support tickets. The repository includes a server-rendered web UI, a versioned JSON API, and a separate Spring Cloud Gateway service with Redis-backed rate limiting and circuit-breaker fallback.
 
+## Screenshots
+
+| Agent ticket list | Ticket conversation (dark mode) |
+| --- | --- |
+| ![Ticket list with saved views, filters, status and priority badges](docs/screenshots/ticket-list.jpg) | ![Ticket detail with conversation thread, internal note and properties panel in dark mode](docs/screenshots/ticket-detail-dark.jpg) |
+
+| Sign in | Mobile |
+| --- | --- |
+| ![Sign-in page](docs/screenshots/sign-in.jpg) | <img src="docs/screenshots/mobile.jpg" alt="Ticket list on a phone" width="280"> |
+
+Screenshots show the demo seed data.
+
 ## Architecture
 
 ```mermaid
@@ -30,6 +42,10 @@ The application and database are private to the Compose network. Only the gatewa
 - Session-based Spring Security authentication and server-rendered Thymeleaf pages.
 - REST endpoints under `/api/v1/tickets` with validated input and explicit response DTOs.
 - Redis token-bucket request limits and gateway circuit breaking.
+- Agent workspace with saved ticket views (filters, columns, sort, default view) per user, pagination, and internal notes that requesters never see.
+- Light and dark themes with a per-user preference applied server-side, and a responsive layout for phones.
+- Live ticket updates with an optional notification sound.
+- Argon2id password hashing; existing bcrypt hashes are upgraded on sign-in.
 - MySQL persistence, health/readiness endpoints, Docker Compose orchestration, and demo-only seed data.
 
 ## Run locally

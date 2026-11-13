@@ -25,10 +25,15 @@ public class TicketEndpoint {
 
     @Autowired
     UserService userService;
+    @Autowired
+    org.dev.helpdesk_pro.Data.Users.UserRepository userRepository;
 
     @GetMapping("/{id}")
     public String getTicket(@PathVariable Long id, Principal principal, Model model) throws AccessDeniedException {
         model.addAttribute("ticket", ticketService.getTicketForUser(id, principal.getName()));
+        if (userService.isUsernameAssociatedWithElevatedAccount(principal.getName())) {
+            model.addAttribute("agents", userRepository.findByNotRole("USER"));
+        }
         return "details";
     }
 
@@ -52,8 +57,8 @@ public class TicketEndpoint {
     }
 
     @PostMapping("/{id}/newnote")
-    public String newNote(@RequestParam String note, @PathVariable Long id, Principal principal) throws AccessDeniedException {
-        ticketService.newNote(note, principal.getName(), id);
+    public String newNote(@RequestParam String note, @RequestParam(defaultValue = "false") boolean internal, @PathVariable Long id, Principal principal) throws AccessDeniedException {
+        ticketService.newNote(note, principal.getName(), id, internal);
 
         if (userService.isUsernameAssociatedWithElevatedAccount(principal.getName())) {
             return "redirect:/dashboard/details/" + id;

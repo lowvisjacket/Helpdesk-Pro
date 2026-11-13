@@ -43,12 +43,32 @@ public class TicketApiController {
         List<Ticket> tickets = userService.isUsernameAssociatedWithElevatedAccount(principal.getName())
                 ? ticketRepository.findAllWithNotes()
                 : ticketService.getUserTickets(principal.getName());
-        return tickets.stream().map(TicketResponse::from).toList();
+        return tickets.stream().map(ticket -> respond(ticket, principal)).toList();
+    }
+
+    /** Lightweight polling endpoint: tickets this user may see that someone else changed since the given time. */
+    @GetMapping("/changes")
+    public java.util.Map<String, Object> changes(@RequestParam(defaultValue = "0") long since, Principal principal) {
+        long now = System.currentTimeMillis();
+        long from = since <= 0 || since > now ? now : since;
+        List<java.util.Map<String, Object>> changes = ticketService.changesSince(from, principal.getName()).stream()
+                .limit(20)
+                .map(ticket -> java.util.Map.<String, Object>of(
+                        "id", ticket.getId(),
+                        "title", ticket.getTitle(),
+                        "created", ticket.getCreatedAt() != null && ticket.getCreatedAt() > from))
+                .toList();
+        return java.util.Map.of("now", now - 1, "changes", changes);
+    }
+
+    /** Internal notes are withheld from requesters. */
+    private TicketResponse respond(Ticket ticket, Principal principal) {
+        return TicketResponse.from(ticket, userService.isUsernameAssociatedWithElevatedAccount(principal.getName()));
     }
 
     @GetMapping("/{id}")
     public TicketResponse getTicket(@PathVariable Long id, Principal principal) throws AccessDeniedException {
-        return TicketResponse.from(ticketService.getTicketForUser(id, principal.getName()));
+        return respond(ticketService.getTicketForUser(id, principal.getName()), principal);
     }
 
     @PostMapping
@@ -63,7 +83,7 @@ public class TicketApiController {
         ticket.setRequestor(request.requestor());
         Ticket created = ticketService.createNewTicket(ticket, principal.getName());
         URI location = URI.create("/api/v1/tickets/" + created.getId());
-        return ResponseEntity.created(location).body(TicketResponse.from(created));
+        return ResponseEntity.created(location).body(respond(created, principal));
     }
 
     @PatchMapping("/{id}")
@@ -79,7 +99,7 @@ public class TicketApiController {
         update.setDepartment(request.department());
         update.setAgentUsername(request.agentUsername());
         ticketService.updateTicket(update, id, principal.getName());
-        return TicketResponse.from(ticketService.getTicketForUser(id, principal.getName()));
+        return respond(ticketService.getTicketForUser(id, principal.getName()), principal);
     }
 
     @PostMapping("/{id}/notes")
@@ -90,7 +110,7 @@ public class TicketApiController {
     ) throws AccessDeniedException {
         ticketService.newNote(request.note(), principal.getName(), id);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(TicketResponse.from(ticketService.getTicketForUser(id, principal.getName())));
+                .body(respond(ticketService.getTicketForUser(id, principal.getName()), principal));
     }
 
     public record CreateTicketRequest(
@@ -127,7 +147,7 @@ public class TicketApiController {
             String ticketTime,
             List<NoteResponse> notes
     ) {
-        private static TicketResponse from(Ticket ticket) {
+        private static TicketResponse from(Ticket ticket, boolean includeInternal) {
             return new TicketResponse(
                     ticket.getId(),
                     ticket.getTitle(),
@@ -141,7 +161,9 @@ public class TicketApiController {
                     ticket.getImportance(),
                     ticket.getTicketDate(),
                     ticket.getTicketTime(),
-                    ticket.getNotes().stream().map(NoteResponse::from).toList()
+                    ticket.getNotes().stream()
+                            .filter(note -> includeInternal || !note.isInternalNote())
+                            .map(NoteResponse::from).toList()
             );
         }
     }

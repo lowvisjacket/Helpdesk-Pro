@@ -20,6 +20,28 @@ public class DashboardEndpoint {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    @org.springframework.beans.factory.annotation.Autowired
+    private org.dev.helpdesk_pro.Data.Views.SavedViewRepository savedViewRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    private org.dev.helpdesk_pro.Logic.TicketService ticketService;
+
+    private static final int PAGE_SIZE = 50;
+
+    /** Only a system administrator may create, change or disable system administrator accounts. */
+    private static void requireSysadminFor(org.dev.helpdesk_pro.Enum.UserRole... roles) {
+        var authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        boolean sysadmin = authentication.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_SYSADMIN".equals(authority.getAuthority()));
+        if (sysadmin) {
+            return;
+        }
+        for (org.dev.helpdesk_pro.Enum.UserRole role : roles) {
+            if (role == org.dev.helpdesk_pro.Enum.UserRole.SYSADMIN) {
+                throw new org.springframework.security.access.AccessDeniedException(
+                        "Only a system administrator can manage system administrator accounts.");
+            }
+        }
+    }
 
     public DashboardEndpoint(
             TicketRepository ticketRepository,
@@ -32,10 +54,78 @@ public class DashboardEndpoint {
     }
 
     @GetMapping("/")
-    public String getDashboard(@NonNull Model model) {
-        List<Ticket> tickets = ticketRepository.findOpenTickets();
+    public String getDashboard(
+            @NonNull Model model,
+            Principal principal,
+            @RequestParam(required = false) Long view,
+            @RequestParam(required = false) String f,
+            @RequestParam(required = false) Long from,
+            @RequestParam(required = false) List<String> status,
+            @RequestParam(required = false) List<String> importance,
+            @RequestParam(required = false) String department,
+            @RequestParam(required = false) String assignee,
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) List<String> col,
+            @RequestParam(defaultValue = "1") int page
+    ) {
+        String username = principal.getName();
+        List<org.dev.helpdesk_pro.Data.Views.SavedView> views =
+                savedViewRepository.findByUsernameOrderByDisplayOrderAscIdAsc(username);
+        org.dev.helpdesk_pro.Data.Views.SavedView activeView = null;
+        org.dev.helpdesk_pro.Data.Views.SavedView fromView = null;
+        org.dev.helpdesk_pro.Logic.TicketFilter filter = org.dev.helpdesk_pro.Logic.TicketFilter.open();
+        java.util.Set<String> cols = org.dev.helpdesk_pro.Logic.TicketFilter.columns(null);
+        boolean custom = f != null;
+        if (custom) {
+            // The filter form was submitted: an ad-hoc, not yet saved, filter.
+            filter = org.dev.helpdesk_pro.Logic.TicketFilter.of(status, importance, department, assignee, q, sort);
+            cols = org.dev.helpdesk_pro.Logic.TicketFilter.columns(col == null ? "" : String.join(",", col));
+            fromView = views.stream().filter(v -> v.getId().equals(from)).findFirst().orElse(null);
+        } else {
+            if (view == null) {
+                activeView = views.stream().filter(org.dev.helpdesk_pro.Data.Views.SavedView::isDefaultView).findFirst().orElse(null);
+            } else if (view != 0) {
+                activeView = views.stream().filter(v -> v.getId().equals(view)).findFirst().orElse(null);
+            }
+            if (activeView != null) {
+                filter = org.dev.helpdesk_pro.Logic.TicketFilter.fromQuery(activeView.getFilters(), activeView.getSortOrder());
+                cols = org.dev.helpdesk_pro.Logic.TicketFilter.columns(activeView.getVisibleColumns());
+            }
+        }
+        List<Ticket> all = ticketService.listTickets(filter, username);
+        int pageCount = Math.max(1, (all.size() + PAGE_SIZE - 1) / PAGE_SIZE);
+        int current = Math.min(Math.max(page, 1), pageCount);
+        int start = (current - 1) * PAGE_SIZE;
+        List<Ticket> tickets = all.subList(start, Math.min(start + PAGE_SIZE, all.size()));
+        // Every value below is validated (enum names, whitelisted columns, numeric ids, encoded text).
+        String baseQuery;
+        if (custom) {
+            StringBuilder query = new StringBuilder("f=1");
+            if (!filter.toQuery().isEmpty()) {
+                query.append('&').append(filter.toQuery());
+            }
+            query.append("&sort=").append(filter.sort());
+            cols.forEach(column -> query.append("&col=").append(column));
+            if (fromView != null) {
+                query.append("&from=").append(fromView.getId());
+            }
+            baseQuery = query.toString();
+        } else {
+            baseQuery = "view=" + (activeView == null ? 0 : activeView.getId());
+        }
         model.addAttribute("tickets", tickets);
-        model.addAttribute("totalTickets", tickets.size());
+        model.addAttribute("totalTickets", all.size());
+        model.addAttribute("page", current);
+        model.addAttribute("pageCount", pageCount);
+        model.addAttribute("firstRow", all.isEmpty() ? 0 : start + 1);
+        model.addAttribute("lastRow", start + tickets.size());
+        model.addAttribute("baseQuery", baseQuery);
+        model.addAttribute("filter", filter);
+        model.addAttribute("cols", cols);
+        model.addAttribute("activeView", activeView);
+        model.addAttribute("fromView", fromView);
+        model.addAttribute("custom", custom);
         return "dashboard";
     }
 
@@ -69,6 +159,7 @@ public class DashboardEndpoint {
                 || user.getRole() == null) {
             throw new IllegalArgumentException("Provide a name, valid username, password of at least 12 characters, department, and role.");
         }
+        requireSysadminFor(user.getRole());
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException("Username is already in use.");
         }
@@ -89,7 +180,11 @@ public class DashboardEndpoint {
     @PreAuthorize("hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')")
     @GetMapping("/users/{username}")
     public String getUserDetails(@NonNull Model model, @PathVariable String username) {
-        model.addAttribute("user", userRepository.findByUsername(username));
+        User found = userRepository.findByUsername(username);
+        if (found == null) {
+            throw new org.dev.helpdesk_pro.Exceptions.UserNotFoundException("User does not exist.");
+        }
+        model.addAttribute("user", found);
         return "userDetails";
     }
 
@@ -97,6 +192,13 @@ public class DashboardEndpoint {
     @PostMapping("/users/{username}/update")
     public String updateUser(@ModelAttribute User user, @PathVariable String username) {
         User oldUser = userRepository.findByUsername(username);
+        if (oldUser == null) {
+            throw new org.dev.helpdesk_pro.Exceptions.UserNotFoundException("User does not exist.");
+        }
+        if (user.getRole() == null) {
+            throw new IllegalArgumentException("A role is required.");
+        }
+        requireSysadminFor(oldUser.getRole(), user.getRole());
         oldUser.setDepartment(user.getDepartment());
         oldUser.setFirstName(user.getFirstName());
         oldUser.setLastName(user.getLastName());
@@ -109,6 +211,13 @@ public class DashboardEndpoint {
     @PostMapping("/users/{username}/toggle")
     public String toggleUser(@PathVariable String username) {
         User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new org.dev.helpdesk_pro.Exceptions.UserNotFoundException("User does not exist.");
+        }
+        requireSysadminFor(user.getRole());
+        if (username.equals(org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName())) {
+            throw new IllegalArgumentException("You cannot disable your own account.");
+        }
         user.setAccountStatus(!user.isAccountStatus());
         userRepository.save(user);
         return "redirect:/dashboard/users/" + username;
@@ -124,13 +233,14 @@ public class DashboardEndpoint {
         if (user == null) {
             throw new org.dev.helpdesk_pro.Exceptions.UserNotFoundException("User does not exist.");
         }
+        savedViewRepository.deleteAll(savedViewRepository.findByUsernameOrderByDisplayOrderAscIdAsc(username));
         userRepository.delete(user);
         return "redirect:/dashboard/users";
     }
 
     @GetMapping("/details/{id}")
-    public String getTicketDetails(@PathVariable Long id, Model model, Principal principal) {
-        model.addAttribute("ticket", ticketRepository.findWithNotesById(id));
+    public String getTicketDetails(@PathVariable Long id, Model model, Principal principal) throws java.nio.file.AccessDeniedException {
+        model.addAttribute("ticket", ticketService.getTicketForUser(id, principal.getName()));
         model.addAttribute("agents", userRepository.findByNotRole("USER"));
         model.addAttribute("username", principal.getName());
         return "details";

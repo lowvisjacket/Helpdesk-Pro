@@ -28,6 +28,9 @@ public class TicketNote {
     private String ticketNoteDate;
     @Column(name = "ticketNoteTime")
     private String ticketNoteTime;
+    /** Internal notes are only ever shown to staff. */
+    @Column(name = "internalNote", columnDefinition = "boolean default false not null")
+    private boolean internalNote;
 
     public TicketNote() {
     }

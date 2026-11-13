@@ -1,7 +1,9 @@
 package org.dev.helpdesk_pro.Controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -9,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ErrorEndpoint {
 
     @RequestMapping("/403")
-    public String unauthorized() {
-        return "403";
+    public String unauthorized(Model model, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        model.addAttribute("status", 403);
+        return "error";
     }
 
     @GetMapping("/540")

@@ -15,6 +15,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     Ticket findWithNotesById(Long id);
     List<Ticket> findByDepartment(TicketDepartment department);
     List<Ticket> findByAgentUsername(String agentUsername);
+    List<Ticket> findByStaffUpdatedAtGreaterThan(Long since);
+    List<Ticket> findByRequestorUsernameAndUpdatedAtGreaterThan(String requestorUsername, Long since);
 
     List<Ticket> findByRequestorUsername(String requestorUsername);
     @EntityGraph(attributePaths = "notes")

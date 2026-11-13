@@ -1,201 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Helpdesk Pro - Login</title>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Inter, "Segoe UI", Arial, sans-serif;
-        }
-
-        body {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #f8fafc;
-            color: #1f2937;
-        }
-
-        .login-container {
-            width: 360px;
-            background: #ffffff;
-            padding: 36px;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-        }
-
-        .brand {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-
-        .brand h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #111827;
-            letter-spacing: -0.5px;
-        }
-
-        .brand p {
-            margin-top: 5px;
-            font-size: 13px;
-            color: #6b7280;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 24px;
-            font-size: 20px;
-            font-weight: 600;
-            color: #111827;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #374151;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #d1d5db;
-            font-size: 15px;
-            background: #ffffff;
-            transition: border-color 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 8px;
-
-            border: none;
-            border-radius: 8px;
-
-            background: #2563eb;
-            color: white;
-
-            font-size: 15px;
-            font-weight: 500;
-
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        button:hover {
-            background: #1d4ed8;
-        }
-
-        .error {
-            background: #fef2f2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
-
-            padding: 10px;
-            border-radius: 8px;
-
-            text-align: center;
-            margin-bottom: 18px;
-
-            font-size: 14px;
-        }
-
-        .logout {
-            background: #f0fdf4;
-            color: #16a34a;
-            border: 1px solid #bbf7d0;
-
-            padding: 10px;
-            border-radius: 8px;
-
-            text-align: center;
-            margin-bottom: 18px;
-
-            font-size: 14px;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 24px;
-            font-size: 12px;
-            color: #9ca3af;
-        }
-
-    </style>
-</head>
-
+<head th:replace="~{parts :: head('Sign in')}"></head>
 <body>
-
-<div class="login-container">
-
-    <div class="brand">
-        <h1>Helpdesk Pro</h1>
-        <p>Support portal</p>
+<div class="center">
+  <div class="auth">
+    <div class="brand"><span class="logo">hp</span>helpdesk-pro</div>
+    <div class="card">
+      <h1>Sign in</h1>
+      <p>Use the account your administrator set up for you.</p>
+      <div class="note-banner err" th:if="${param.error}" role="alert">That username or password isn't right. Try again.</div>
+      <div class="note-banner ok" th:if="${param.logout}" role="status">You've signed out.</div>
+      <form method="post" th:action="@{/auth/login}">
+        <label class="field"><span>Username</span>
+          <input class="input" type="text" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus></label>
+        <label class="field"><span>Password</span>
+          <input class="input" type="password" name="password" autocomplete="current-password" required></label>
+        <button class="btn tint block" type="submit">Sign in</button>
+      </form>
     </div>
-
-    <h2>Sign in</h2>
-
-    <div class="error" th:if="${param.error}">
-        Invalid username or password.
-    </div>
-
-    <div class="logout" th:if="${param.logout}">
-        You have been logged out.
-    </div>
-
-    <form th:action="@{/auth/login}" method="post">
-
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    placeholder="Enter your username"
-                    required
-                    autofocus>
-        </div>
-
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Enter your password"
-                    required>
-        </div>
-
-        <button type="submit">
-            Sign in
-        </button>
-
-    </form>
-
-    <div class="footer">
-        © Helpdesk Pro
-    </div>
-
+    <p class="fine">No account? Ask your helpdesk administrator to create one.</p>
+  </div>
 </div>
-
 </body>
 </html>

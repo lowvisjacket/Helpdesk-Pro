@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="page(title, active, content)" th:class="${me?.theme}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="_csrf" th:if="${_csrf != null}" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:if="${_csrf != null}" th:content="${_csrf.headerName}">
+  <title th:text="${title} + ' - helpdesk-pro'">helpdesk-pro</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body th:data-now="${now}" th:data-muted="${me != null and me.soundMuted}"
+      th:data-ticket-base="${staff == true} ? '/dashboard/details/' : '/tickets/'" th:data-ticket-id="${ticket?.id}">
+<!--/* Original helpdesk-pro icons. */-->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M9 6v12"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.7-3.6 3.2-5.5 7-5.5s6.3 1.900 7 5.500"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16M8 16v-5M12 16V7M16 16v-3"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8.5" stroke-dasharray="3 3.670"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-view" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+</defs></svg>
+
+<div class="app">
+  <nav class="side" aria-label="Primary">
+    <a class="brand" th:href="@{/}"><span class="logo">hp</span>helpdesk-pro</a>
+
+    <th:block sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')">
+      <a class="nav" th:href="@{/dashboard/}" th:classappend="${active == 'tickets'} ? 'on'"><svg class="i"><use href="#i-ticket"/></svg><span>Tickets</span></a>
+      <a class="nav" th:href="@{/dashboard/users}" th:classappend="${active == 'users'} ? 'on'"><svg class="i"><use href="#i-users"/></svg><span>Users</span></a>
+      <a class="nav" th:href="@{/dashboard/reports}" th:classappend="${active == 'reports'} ? 'on'"><svg class="i"><use href="#i-chart"/></svg><span>Reports</span></a>
+      <th:block th:if="${navViews != null and !navViews.isEmpty()}">
+        <div class="sect">Views</div>
+        <a class="nav" th:each="v : ${navViews}" th:href="@{/dashboard/(view=${v.id})}"><svg class="i"><use href="#i-view"/></svg><span th:text="${v.name}">View</span></a>
+      </th:block>
+    </th:block>
+    <th:block sec:authorize="hasRole('USER')">
+      <a class="nav" th:href="@{/home}" th:classappend="${active == 'tickets'} ? 'on'"><svg class="i"><use href="#i-ticket"/></svg><span>My tickets</span></a>
+      <a class="nav" th:href="@{/create}" th:classappend="${active == 'new'} ? 'on'"><svg class="i"><use href="#i-plus"/></svg><span>New ticket</span></a>
+    </th:block>
+
+    <div class="grow"></div>
+    <a class="nav" th:href="@{/settings}" th:classappend="${active == 'settings'} ? 'on'"><svg class="i"><use href="#i-gear"/></svg><span>Settings</span></a>
+  </nav>
+  <div class="scrim" data-nav-toggle></div>
+
+  <div class="main">
+    <header class="bar">
+      <button class="iconbtn menu-btn" type="button" data-nav-toggle aria-label="Open navigation"><svg class="i"><use href="#i-menu"/></svg></button>
+      <span class="title" th:text="${title}">Page</span>
+      <div class="grow"></div>
+      <a class="btn tint" sec:authorize="hasAnyRole('TECHNICIAN','ADMIN','SYSADMIN')" th:href="@{/dashboard/create}"><svg class="i"><use href="#i-plus"/></svg>New ticket</a>
+      <a class="btn tint" sec:authorize="hasRole('USER')" th:href="@{/create}"><svg class="i"><use href="#i-plus"/></svg>New ticket</a>
+      <button class="avatar" id="acct" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Account menu"
+              th:text="${@fmt.initials(me != null ? me.fullName : #authentication.name)}">me</button>
+    </header>
+
+    <div class="pop menu" id="menu">
+      <div class="me">
+        <span class="avatar" th:text="${@fmt.initials(me != null ? me.fullName : #authentication.name)}">me</span>
+        <div><b th:text="${me != null ? me.fullName : #authentication.name}">Name</b><small th:if="${me != null}" th:text="${@fmt.label(me.role)}">Role</small></div>
+      </div>
+      <hr>
+      <div class="row"><span>Appearance</span>
+        <div class="seg" role="group" aria-label="Appearance">
+          <button type="button" data-theme="light">Light</button><button type="button" data-theme="dark">Dark</button><button type="button" data-theme="system">Auto</button>
+        </div>
+      </div>
+      <label class="row"><span>Notification sound</span><input type="checkbox" class="switch" data-sound></label>
+      <hr>
+      <a class="item" th:href="@{/settings}">Settings</a>
+      <form th:action="@{/logout}" method="post"><button class="item" type="submit">Sign out</button></form>
+    </div>
+
+    <main th:replace="${content}"></main>
+  </div>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

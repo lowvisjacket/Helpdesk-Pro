@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<span th:fragment="status(s)" class="badge" th:classappend="'st-' + ${s}" th:text="${@fmt.label(s)}">Open</span>
+
+<span th:fragment="prio(p)" class="prio" th:classappend="'pr-' + ${p}"><i aria-hidden="true"><b></b><b></b><b></b></i><span th:text="${@fmt.label(p)}">Low</span></span>
+
+<time th:fragment="when(date, time)" th:datetime="${@fmt.iso(date, time)}" th:text="${date + ' ' + @fmt.time(time)}">2026-01-01 12:00</time>
+
+<time th:fragment="day(date, time)" data-date-only th:datetime="${@fmt.iso(date, time)}" th:text="${date}">2026-01-01</time>
+
+<head th:fragment="head(title)">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${title} + ' - helpdesk-pro'">helpdesk-pro</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+</body>
+</html>
