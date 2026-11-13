@@ -37,7 +37,7 @@ public class SecurityConfiguration {
 
         http.authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/auth/login", "/css/**", "/images/**", "/favicon.ico", "/actuator/health").permitAll()
+                                .requestMatchers("/auth/login", "/css/**", "/js/**", "/images/**", "/favicon.ico", "/actuator/health").permitAll()
                                 .requestMatchers("/dashboard/**").hasAnyRole("TECHNICIAN", "ADMIN", "SYSADMIN")
                                 .requestMatchers("/success/").authenticated()
                                 .requestMatchers("/error").permitAll()
@@ -74,16 +74,33 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationProvider authenticationProvider(
             UserDetailsService userDetailsService,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            org.dev.helpdesk_pro.Data.Users.UserRepository userRepository
     ) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
+        // After a successful login with an outdated hash (e.g. bcrypt), store the re-encoded Argon2id hash.
+        provider.setUserDetailsPasswordService((user, newPassword) -> {
+            org.dev.helpdesk_pro.Data.Users.User stored = userRepository.findByUsername(user.getUsername());
+            if (stored != null) {
+                stored.setPassword(newPassword);
+                userRepository.save(stored);
+            }
+            return org.springframework.security.core.userdetails.User.withUserDetails(user).password(newPassword).build();
+        });
         return provider;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        // Argon2id for every new hash. Legacy hashes stored without an {id} prefix are bcrypt.
+        java.util.Map<String, PasswordEncoder> encoders = new java.util.HashMap<>();
+        encoders.put("argon2", org.springframework.security.crypto.argon2.Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8());
+        encoders.put("bcrypt", new BCryptPasswordEncoder());
+        org.springframework.security.crypto.password.DelegatingPasswordEncoder encoder =
+                new org.springframework.security.crypto.password.DelegatingPasswordEncoder("argon2", encoders);
+        encoder.setDefaultPasswordEncoderForMatches(new BCryptPasswordEncoder());
+        return encoder;
     }
 
     private static void writeApiError(
