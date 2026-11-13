@@ -16,6 +16,7 @@ import java.util.Set;
 
 @Component
 @Profile("demo")
+@org.springframework.core.annotation.Order(1)
 public class UserSeeder implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(UserSeeder.class);
 

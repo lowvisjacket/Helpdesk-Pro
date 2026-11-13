@@ -19,6 +19,8 @@ import java.util.List;
 
 @Service
 public class TicketService {
+    /** Longest description or reply we accept. */
+    public static final int MAX_TEXT = 5000;
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
     private final UserService userService;
@@ -42,13 +44,15 @@ public class TicketService {
         validateDescription(newTicket.getDescription());
         validateDepartment(newTicket.getDepartment());
 
-        return ticketRepository.save(new Ticket(
+        Ticket ticket = new Ticket(
                 newTicket.getTitle(),
                 newTicket.getDescription(),
                 newTicket.getDepartment(),
                 newTicket.getRequestor(),
                 username
-            ));
+            );
+        ticket.touch(username, false);
+        return ticketRepository.save(ticket);
     }
 
     public void updateTicket(Ticket ticket, Long Id, String username) throws AccessDeniedException {
@@ -74,17 +78,30 @@ public class TicketService {
             oldTicket.setAgent(agentName);
         }
 
+        oldTicket.touch(username, false);
         ticketRepository.save(oldTicket);
     }
 
     public void newNote(String note, String username, Long id) throws AccessDeniedException {
+        newNote(note, username, id, false);
+    }
+
+    public void newNote(String note, String username, Long id, boolean internalRequested) throws AccessDeniedException {
         if (note == null || note.isBlank()) {
             throw new IllegalArgumentException("Note must not be blank.");
         }
+        if (note.length() > MAX_TEXT) {
+            throw new IllegalArgumentException("Reply must be " + MAX_TEXT + " characters or fewer.");
+        }
         Ticket ticket = getTicket(id, username);
         validateIfUserCanAccessTicket(username, ticket);
+        // Only staff can write internal notes; a requester's note is always public.
+        boolean internal = internalRequested && userService.isUsernameAssociatedWithElevatedAccount(username);
         TicketNote ticketNote = new TicketNote(ticket, note, username);
+        ticketNote.setInternalNote(internal);
         ticketNoteRepository.save(ticketNote);
+        ticket.touch(username, internal);
+        ticketRepository.save(ticket);
     }
 
     private void validateTicketStatus(TicketStatus ticketStatus) {
@@ -103,6 +120,9 @@ public class TicketService {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Requestor name must not be blank.");
         }
+        if (name.length() > 120) {
+            throw new IllegalArgumentException("Requester name must be 120 characters or fewer.");
+        }
     }
 
     private void validateRequestorUsername(String username) {
@@ -116,11 +136,17 @@ public class TicketService {
         if (title == null || title.isBlank()) {
             throw new IllegalArgumentException("Title must not be null or empty.");
         }
+        if (title.length() > 200) {
+            throw new IllegalArgumentException("Subject must be 200 characters or fewer.");
+        }
     }
 
     private void validateDescription(String description) {
         if (description == null || description.isBlank()) {
             throw new IllegalArgumentException("Description must not be null or empty.");
+        }
+        if (description.length() > MAX_TEXT) {
+            throw new IllegalArgumentException("Description must be " + MAX_TEXT + " characters or fewer.");
         }
     }
 
@@ -152,6 +178,24 @@ public class TicketService {
         if (!ticket.getRequestorUsername().equals(username)) {
             throw new AccessDeniedException("User does not have sufficient permissions to edit or view this ticket");
         }
+    }
+
+    public List<Ticket> listTickets(TicketFilter filter, String username) {
+        return ticketRepository.findAll().stream()
+                .filter(ticket -> filter.matches(ticket, username))
+                .sorted(filter.comparator())
+                .toList();
+    }
+
+    /** Tickets visible to this user that someone else changed after the given time. */
+    public List<Ticket> changesSince(long since, String username) {
+        boolean staff = userService.isUsernameAssociatedWithElevatedAccount(username);
+        List<Ticket> changed = staff
+                ? ticketRepository.findByStaffUpdatedAtGreaterThan(since)
+                : ticketRepository.findByRequestorUsernameAndUpdatedAtGreaterThan(username, since);
+        return changed.stream()
+                .filter(ticket -> !username.equals(staff ? ticket.getStaffLastUpdatedBy() : ticket.getLastUpdatedBy()))
+                .toList();
     }
 
     public List<Ticket> getUserTickets(String username) {

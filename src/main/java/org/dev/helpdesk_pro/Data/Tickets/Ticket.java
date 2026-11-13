@@ -35,7 +35,7 @@ public class Ticket implements Serializable {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "agent")
@@ -57,6 +57,25 @@ public class Ticket implements Serializable {
 
     @Column(name = "ticketTime")
     private String ticketTime;
+    /** Epoch millis. updatedAt tracks changes requesters may see; staffUpdatedAt also covers internal notes. */
+    private Long createdAt;
+    private Long updatedAt;
+    private Long staffUpdatedAt;
+    private String lastUpdatedBy;
+    private String staffLastUpdatedBy;
+
+    public void touch(String by, boolean staffOnly) {
+        long now = System.currentTimeMillis();
+        if (id == null && createdAt == null) {
+            createdAt = now;
+        }
+        staffUpdatedAt = now;
+        staffLastUpdatedBy = by;
+        if (!staffOnly) {
+            updatedAt = now;
+            lastUpdatedBy = by;
+        }
+    }
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("ticketNoteDate ASC, ticketNoteTime ASC")

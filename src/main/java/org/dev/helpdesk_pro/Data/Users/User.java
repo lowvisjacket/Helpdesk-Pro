@@ -33,4 +33,7 @@ public class User {
     private boolean accountStatus;
 
     private Long loginAttempts;
+    /** UI theme override: "light", "dark", or null to follow the device. */
+    private String theme;
+    private Boolean soundMuted;
 }

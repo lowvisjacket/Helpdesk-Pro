@@ -1,759 +1,105 @@
-<!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
-
-<head>
-
-    <meta charset="UTF-8">
-    <title>Helpdesk Dashboard</title>
-
-    <style>
-
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:"Inter",Arial,sans-serif;
-        }
-
-
-        body{
-
-            background:#f8fafc;
-            color:#1e293b;
-
-        }
-
-
-
-        /* SIDEBAR */
-
-        .sidebar{
-
-            width:260px;
-            height:100vh;
-
-            position:fixed;
-
-            background:#0f172a;
-
-            color:white;
-
-            padding:25px;
-
-        }
-
-
-        .brand{
-
-            font-size:24px;
-            font-weight:700;
-
-            margin-bottom:40px;
-
-        }
-
-
-        .menu a{
-
-            display:flex;
-
-            align-items:center;
-
-            padding:13px 15px;
-
-            margin-bottom:8px;
-
-            color:#cbd5e1;
-
-            text-decoration:none;
-
-            border-radius:10px;
-
-        }
-
-
-        .menu a:hover{
-
-            background:#1e293b;
-
-            color:white;
-
-        }
-
-
-
-
-
-        /* MAIN */
-
-
-        .main{
-
-            margin-left:260px;
-
-        }
-
-
-
-        .top-header{
-
-            height:75px;
-
-            background:white;
-
-            border-bottom:1px solid #e2e8f0;
-
-            display:flex;
-
-            align-items:center;
-
-            justify-content:space-between;
-
-            padding:0 35px;
-
-        }
-
-
-
-        .profile{
-
-            display:flex;
-
-            align-items:center;
-
-            gap:15px;
-
-        }
-
-
-        .logout{
-
-            background:#ef4444;
-
-            border:none;
-
-            color:white;
-
-            padding:9px 18px;
-
-            border-radius:8px;
-
-            cursor:pointer;
-
-        }
-
-
-
-
-        .content{
-
-            padding:35px;
-
-        }
-
-
-
-
-        /* SUMMARY */
-
-
-        .summary{
-
-            display:grid;
-
-            grid-template-columns:repeat(4,1fr);
-
-            gap:20px;
-
-            margin-bottom:35px;
-
-        }
-
-
-        .summary-card{
-
-            background:white;
-
-            padding:22px;
-
-            border-radius:14px;
-
-            box-shadow:0 4px 15px rgba(0,0,0,.05);
-
-        }
-
-
-        .summary-title{
-
-            color:#64748b;
-
-            font-size:14px;
-
-        }
-
-
-        .summary-number{
-
-            font-size:28px;
-
-            font-weight:bold;
-
-            margin-top:8px;
-
-        }
-
-
-
-
-        /* TOOLBAR */
-
-
-        .toolbar{
-
-            display:flex;
-
-            justify-content:space-between;
-
-            align-items:center;
-
-            margin-bottom:20px;
-
-        }
-
-
-        .create{
-
-            background:#2563eb;
-
-            color:white;
-
-            border:none;
-
-            padding:12px 22px;
-
-            border-radius:9px;
-
-            cursor:pointer;
-
-            font-weight:600;
-
-        }
-
-
-
-
-
-        /* TICKETS */
-
-
-        .ticket-list{
-
-            background:white;
-
-            border-radius:14px;
-
-            overflow:hidden;
-
-            box-shadow:0 4px 18px rgba(0,0,0,.06);
-
-        }
-
-
-
-
-        .ticket-row{
-
-            padding:22px;
-
-            border-bottom:1px solid #e5e7eb;
-
-            display:grid;
-
-            grid-template-columns:2fr 1fr 1fr 1fr 120px;
-
-            align-items:center;
-
-        }
-
-
-        .ticket-row:hover{
-
-            background:#f8fafc;
-
-        }
-
-
-
-
-        .ticket-title{
-
-            font-weight:700;
-
-            color:#0f172a;
-
-        }
-
-
-
-        .small{
-
-            color:#64748b;
-
-            font-size:14px;
-
-        }
-
-
-
-
-        .badge{
-
-            display:inline-block;
-
-            padding:6px 12px;
-
-            border-radius:20px;
-
-            font-size:13px;
-
-            font-weight:600;
-
-        }
-
-
-
-        .open{
-
-            background:#dcfce7;
-
-            color:#166534;
-
-        }
-
-
-        .progress{
-
-            background:#fef3c7;
-
-            color:#92400e;
-
-        }
-
-
-        .resolved{
-
-            background:#dbeafe;
-
-            color:#1e40af;
-
-        }
-
-
-        .closed{
-
-            background:#e5e7eb;
-
-            color:#374151;
-
-        }
-
-
-
-        .priority-high{
-
-            color:#dc2626;
-
-            font-weight:bold;
-
-        }
-
-
-
-        .priority-low{
-
-            color:#16a34a;
-
-        }
-
-
-
-
-        .view{
-
-            background:#0f766e;
-
-            color:white;
-
-            border:none;
-
-            padding:9px 16px;
-
-            border-radius:7px;
-
-            cursor:pointer;
-
-        }
-
-
-
-
-
-        .empty{
-
-            padding:50px;
-
-            text-align:center;
-
-            background:white;
-
-        }
-
-
-
-        @media(max-width:1000px){
-
-        .sidebar{
-
-            display:none;
-
-        }
-
-        .main{
-
-            margin-left:0;
-
-        }
-
-
-        .ticket-row{
-
-            grid-template-columns:1fr;
-
-            gap:15px;
-
-        }
-
-
-        .summary{
-
-            grid-template-columns:1fr;
-
-        }
-
-
-        }
-        .filters{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    align-items:center;
-    margin-bottom:20px;
-}
-
-.filters select,
-.filters input{
-    padding:10px 12px;
-    border:1px solid #d1d5db;
-    border-radius:8px;
-    background:white;
-    font-size:14px;
-    min-width:160px;
-}
-
-.filters button{
-    padding:10px 18px;
-    border:none;
-    border-radius:8px;
-    background:#2563eb;
-    color:white;
-    cursor:pointer;
-    font-weight:500;
-}
-
-.filters button:hover{
-    background:#1d4ed8;
-}
-
-.filters .clear{
-    background:#6b7280;
-}
-
-.filters .clear:hover{
-    background:#4b5563;
-}
-
-
-    </style>
-
-</head>
-
-
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: page('Tickets', 'tickets', ~{::main})}">
 <body>
+<main class="view" th:with="target=${activeView != null ? activeView : fromView}">
+  <div class="head">
+    <h1 th:text="${activeView != null ? activeView.name : (custom ? 'Filtered tickets' : 'All open')}">All open</h1>
+    <span class="sub" th:text="${@fmt.count(totalTickets, 'ticket', 'tickets')}">0 tickets</span>
+    <div class="grow"></div>
+    <details class="dd right">
+      <summary class="btn">Save view</summary>
+      <form class="pop" method="post" th:action="@{/views}" style="width:250px">
+        <input type="hidden" name="filters" th:value="${filter.toQuery()}">
+        <input type="hidden" name="columns" th:value="${#strings.setJoin(cols, ',')}">
+        <input type="hidden" name="sort" th:value="${filter.sort()}">
+        <label class="field"><span>Name</span><input class="input" name="name" maxlength="60" required placeholder="e.g. My urgent tickets"></label>
+        <label class="check" style="margin-bottom:.5rem"><input type="checkbox" name="makeDefault" value="true"><span>Open this view by default</span></label>
+        <button class="btn tint block" type="submit">Save as new view</button>
+        <button th:if="${target != null}" class="btn block" style="margin-top:.4rem" type="submit" formnovalidate
+                th:formaction="@{/views/{id}/save(id=${target.id})}" th:text="'Update “' + ${target.name} + '”'">Update</button>
+      </form>
+    </details>
+  </div>
 
+  <nav class="tabs" aria-label="Views">
+    <a th:href="@{/dashboard/(view=0)}" th:classappend="${activeView == null and !custom} ? 'on'">All open</a>
+    <a th:each="v : ${navViews}" th:href="@{/dashboard/(view=${v.id})}" th:text="${v.name}"
+       th:classappend="${activeView != null and activeView.id == v.id} ? 'on'">View</a>
+    <a th:if="${custom}" class="on" aria-current="page">Unsaved filter</a>
+  </nav>
 
-<div class="sidebar">
+  <form class="tools" method="get" th:action="@{/dashboard/}">
+    <input type="hidden" name="f" value="1">
+    <input type="hidden" name="from" th:if="${target != null}" th:value="${target.id}">
+    <details class="dd">
+      <summary class="chip">Status <b th:text="${filter.statuses().isEmpty() ? 'Any' : filter.statuses().size()}">Any</b></summary>
+      <div class="pop">
+        <label class="check" th:each="s : ${@fmt.statuses()}"><input type="checkbox" name="status" th:value="${s}" th:checked="${filter.statuses().contains(s)}"><span th:text="${@fmt.label(s)}">Open</span></label>
+      </div>
+    </details>
+    <details class="dd">
+      <summary class="chip">Priority <b th:text="${filter.importances().isEmpty() ? 'Any' : filter.importances().size()}">Any</b></summary>
+      <div class="pop">
+        <label class="check" th:each="p : ${@fmt.importances()}"><input type="checkbox" name="importance" th:value="${p}" th:checked="${filter.importances().contains(p)}"><span th:text="${@fmt.label(p)}">Low</span></label>
+      </div>
+    </details>
+    <select class="chip" name="department" aria-label="Department">
+      <option value="">Any department</option>
+      <option th:each="d : ${@fmt.departments()}" th:value="${d}" th:text="${@fmt.label(d)}" th:selected="${d == filter.department()}">Dept</option>
+    </select>
+    <select class="chip" name="assignee" aria-label="Assignee">
+      <option value="any" th:selected="${filter.assignee() == 'any'}">Any assignee</option>
+      <option value="me" th:selected="${filter.assignee() == 'me'}">Assigned to me</option>
+      <option value="unassigned" th:selected="${filter.assignee() == 'unassigned'}">Unassigned</option>
+    </select>
+    <select class="chip" name="sort" aria-label="Sort by">
+      <option th:each="s : ${@fmt.sorts()}" th:value="${s}" th:text="'Sort: ' + ${s}" th:selected="${s == filter.sort()}">Sort</option>
+    </select>
+    <details class="dd">
+      <summary class="chip">Columns <b th:text="${cols.size()}">6</b></summary>
+      <div class="pop">
+        <label class="check" th:each="c : ${@fmt.columns()}"><input type="checkbox" name="col" th:value="${c}" th:checked="${cols.contains(c)}"><span th:text="${@fmt.label(c)}">Column</span></label>
+      </div>
+    </details>
+    <input class="chip" type="search" name="q" th:value="${filter.q()}" placeholder="Search" aria-label="Search tickets" maxlength="100">
+    <button class="btn" type="submit">Apply</button>
+  </form>
 
-
-    <div class="brand">
-        HelpDesk Pro
+  <div class="card" data-live>
+    <div class="table-wrap">
+      <table th:if="${!#lists.isEmpty(tickets)}">
+        <thead><tr>
+          <th>ID</th><th>Subject</th>
+          <th th:if="${cols.contains('requester')}" class="hide-sm">Requester</th>
+          <th th:if="${cols.contains('status')}">Status</th>
+          <th th:if="${cols.contains('priority')}">Priority</th>
+          <th th:if="${cols.contains('department')}" class="hide-sm">Department</th>
+          <th th:if="${cols.contains('assignee')}" class="hide-sm">Assignee</th>
+          <th th:if="${cols.contains('created')}" class="hide-sm">Created</th>
+        </tr></thead>
+        <tbody>
+        <tr th:each="t : ${tickets}" th:data-href="@{/dashboard/details/{id}(id=${t.id})}">
+          <td class="mono" th:text="${t.id}">1</td>
+          <td class="subj"><a th:href="@{/dashboard/details/{id}(id=${t.id})}" th:text="${t.title}" th:title="${t.title}">Subject</a></td>
+          <td th:if="${cols.contains('requester')}" class="hide-sm"><span class="who"><span class="avatar" th:text="${@fmt.initials(t.requestor)}">AB</span><span class="trunc" th:text="${t.requestor}" th:title="${t.requestor}">Name</span></span></td>
+          <td th:if="${cols.contains('status')}"><span th:replace="~{parts :: status(${t.ticketStatus})}"></span></td>
+          <td th:if="${cols.contains('priority')}"><span th:replace="~{parts :: prio(${t.importance})}"></span></td>
+          <td th:if="${cols.contains('department')}" class="hide-sm"><span class="trunc" th:text="${@fmt.label(t.department)}" th:title="${@fmt.label(t.department)}">Dept</span></td>
+          <td th:if="${cols.contains('assignee')}" class="hide-sm"><span class="trunc" th:classappend="${t.agent == null} ? 'sub'" th:title="${t.agent}"
+              th:text="${t.agent == null ? 'Unassigned' : t.agent + (t.agentUsername == #authentication.name ? ' (me)' : '')}">Agent</span></td>
+          <td th:if="${cols.contains('created')}" class="hide-sm sub"><time th:replace="~{parts :: day(${t.ticketDate}, ${t.ticketTime})}"></time></td>
+        </tr>
+        </tbody>
+      </table>
     </div>
-
-
-    <div class="menu">
-
-        <a href="/dashboard/">
-            Dashboard
-        </a>
-
-        <a href="/dashboard/users">
-            Users
-        </a>
-
-        <a href="/dashboard/reports">
-            Reports
-        </a>
-
+    <div class="empty" th:if="${#lists.isEmpty(tickets)}">No tickets match this view.</div>
+    <div class="foot" th:if="${pageCount > 1}">
+      <span th:text="${@fmt.number(firstRow) + '–' + @fmt.number(lastRow) + ' of ' + @fmt.number(totalTickets)}">1–50 of 120</span>
+      <span class="grow"></span>
+      <a class="btn" th:if="${page > 1}" th:href="@{${'/dashboard/?' + baseQuery + '&page=' + (page - 1)}}">Previous</a>
+      <a class="btn" th:if="${page < pageCount}" th:href="@{${'/dashboard/?' + baseQuery + '&page=' + (page + 1)}}">Next</a>
     </div>
-
-
-</div>
-
-
-<div class="main">
-
-
-    <header class="top-header">
-
-
-        <h2>
-            Support Center
-        </h2>
-
-
-        <div class="profile">
-
-
-<span th:text="${username}">
-User
-</span>
-
-
-            <form th:action="@{/logout}" method="post">
-
-                <button class="logout">
-                    Logout
-                </button>
-
-            </form>
-
-
-        </div>
-
-
-    </header>
-
-
-    <div class="content">
-
-
-        <div class="summary">
-
-
-            <div class="summary-card">
-
-                <div class="summary-title">
-                    Open Tickets
-                </div>
-
-                <div class="summary-number"
-                     th:text="${tickets.size()}">
-                    0
-                </div>
-
-
-            </div>
-        </div>
-
-
-        <div class="toolbar">
-
-
-            <h2>
-                Tickets
-            </h2>
-
-
-            <form th:action="@{/dashboard/create}"
-                  method="get">
-
-                <button class="create">
-
-                    + New Ticket
-
-                </button>
-
-
-            </form>
-
-
-        </div>
-
-        <form class="filters" method="get" th:action="@{/dashboard/}">
-
-            <select name="status">
-                <option value="">All Statuses</option>
-                <option value="OPEN">Open</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="RESOLVED">Resolved</option>
-                <option value="CLOSED">Closed</option>
-            </select>
-
-            <select name="priority">
-                <option value="">All Priorities</option>
-                <option value="LOW">Low</option>
-                <option value="MEDIUM">Medium</option>
-                <option value="HIGH">High</option>
-                <option value="CRITICAL">Critical</option>
-            </select>
-
-            <select name="agent">
-                <option value="">All Agents</option>
-
-                <option th:each="agent : ${agents}"
-                        th:value="${agent.username}"
-                        th:text="${agent.firstName + ' ' + agent.lastName + (agent.username == #authentication.name ? ' (Me)' : '')}">
-                </option>
-            </select>
-
-            <input type="date" name="submittedDate">
-
-            <button type="submit">
-                Filter
-            </button>
-
-            <button class="clear"
-                    type="button"
-                    onclick="window.location='/dashboard'">
-                Clear
-            </button>
-
-        </form>
-
-        <div class="ticket-list">
-
-
-            <div class="empty"
-                 th:if="${#lists.isEmpty(tickets)}">
-
-                No tickets found
-
-            </div>
-
-
-            <div class="ticket-row"
-                 th:each="ticket:${tickets}">
-
-
-                <div>
-
-                    <div class="ticket-title"
-                         th:text="${ticket.title}">
-
-                    </div>
-
-                    <div class="small"
-                         th:text="${ticket.department}">
-
-                    </div>
-
-                </div>
-
-
-                <div>
-
-<span class="badge"
-
-      th:classappend="
-${ticket.ticketStatus=='OPEN'}?' open':
-(${ticket.ticketStatus=='IN_PROGRESS'}?' progress':
-(${ticket.ticketStatus=='RESOLVED'}?' resolved':' closed'))"
-
-      th:text="${ticket.ticketStatus}">
-
-</span>
-
-
-                </div>
-
-
-                <div>
-
-    <span class="small">
-        Agent
-    </span>
-
-                    <br>
-
-                    <span th:text="${ticket.agent == null ? 'Unassigned' : ticket.agent + (ticket.agent == #authentication.name ? ' (Me)' : '')}">
-    </span>
-
-                </div>
-
-
-                <div>
-
-<span class="small">
-Priority
-</span>
-
-                    <br>
-
-
-                    <span th:text="${ticket.importance}"
-
-                          th:classappend="
-${ticket.importance=='HIGH' || ticket.importance=='CRITICAL'}?' priority-high':
-' priority-low'">
-
-</span>
-
-
-                </div>
-
-
-                <div>
-
-
-                    <form th:action="@{/dashboard/details/{id}(id=${ticket.id})}"
-                          method="get">
-
-
-                        <button class="view">
-
-                            Open
-
-                        </button>
-
-
-                    </form>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-</div>
-
-
+  </div>
+</main>
 </body>
-
 </html>
