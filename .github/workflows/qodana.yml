@@ -1,0 +1,31 @@
+name: Qodana
+
+on:
+  schedule:
+    - cron: "0 5 * * 1"   # Mondays 05:00 UTC
+  workflow_dispatch:
+  pull_request:          # only when the Qodana setup itself changes
+    paths:
+      - qodana.yaml
+      - .github/workflows/qodana.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qodana-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qodana:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Qodana Scan
+        uses: JetBrains/qodana-action@v2026.2
+        with:
+          use-caches: true
+          upload-result: false
